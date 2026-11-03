@@ -17,6 +17,13 @@ const skyAnchors: Anchor[] = [
   { x: 0.78, y: 0.32, radius: 0.028, amplitude: 0.05, speed: 1.1, phase: 2.1 },
   { x: 1, y: 0.26, radius: 0.04, amplitude: 0.025, speed: 0.5, phase: 3.4 },
 ];
+const narrowAnchors: Anchor[] = [
+  { x: 0.84, y: 0.5, radius: 0.042, amplitude: 0.018, speed: 0.6, phase: 0 },
+  { x: 0.98, y: 0.72, radius: 0.034, amplitude: 0.022, speed: 0.8, phase: 1.3 },
+  { x: 0.7, y: 0.34, radius: 0.02, amplitude: 0.03, speed: 1.1, phase: 2.1 },
+  { x: 1, y: 0.28, radius: 0.03, amplitude: 0.016, speed: 0.5, phase: 3.4 },
+];
+const narrowWidth = 768;
 const budCount = 6;
 const pillAngle = (-2 * Math.PI) / 180;
 const wordsSpeed = 0.045;
@@ -27,7 +34,7 @@ export function startLiquidScene({ stage, layer, canvas, track }: LiquidParts) {
   const pill = stage.querySelector<HTMLElement>('[data-liquid-pill]');
   const avoid = [...stage.querySelectorAll<HTMLElement>('[data-liquid-avoid]')];
   const renderer = createLiquidRenderer(canvas);
-  const size = { width: 0, height: 0, unit: 0, sequence: 0 };
+  const size = { width: 0, height: 0, unit: 0, sequence: 0, stageTop: 0 };
   const pointer = { x: 0, y: 0, active: false, until: 0 };
   const cursor: Body = { x: 0, y: 0, radius: 0 };
   const drops: Body[] = skyAnchors.map(() => ({ x: 0, y: 0, radius: 0 }));
@@ -47,7 +54,8 @@ export function startLiquidScene({ stage, layer, canvas, track }: LiquidParts) {
     size.height = layer.clientHeight;
     size.unit = Math.max(size.width, 640);
     size.sequence = (track.firstElementChild as HTMLElement | null)?.offsetWidth ?? 0;
-    renderer?.resize(size.width, size.height, Math.min(window.devicePixelRatio || 1, size.width < 768 ? 1.5 : 2));
+    size.stageTop = -layer.offsetTop;
+    renderer?.resize(size.width, size.height, Math.min(window.devicePixelRatio || 1, size.width < narrowWidth ? 1.5 : 2));
   };
 
   const readPill = () => {
@@ -105,11 +113,15 @@ export function startLiquidScene({ stage, layer, canvas, track }: LiquidParts) {
     cursor.y += (target.y - cursor.y) * follow;
     cursor.radius = unit * 0.024;
 
+    const narrow = width < narrowWidth;
+    const anchors = narrow ? narrowAnchors : skyAnchors;
+    const zoneTop = narrow ? size.stageTop : 0;
+    const zoneHeight = narrow ? Math.min(height, ...keepOuts.map((keepOut) => keepOut.top)) - zoneTop : height;
     const drift = easeFactor(0.07, delta);
     drops.forEach((drop, index) => {
-      const anchor = skyAnchors[index];
+      const anchor = anchors[index];
       let x = anchor.x * width + Math.sin((time / 1000) * anchor.speed + anchor.phase) * anchor.amplitude * unit;
-      let y = anchor.y * height + Math.cos((time / 1000) * anchor.speed * 0.8 + anchor.phase) * anchor.amplitude * unit;
+      let y = zoneTop + anchor.y * zoneHeight + Math.cos((time / 1000) * anchor.speed * 0.8 + anchor.phase) * anchor.amplitude * unit;
       const dx = cursor.x - x;
       const dy = cursor.y - y;
       const distance = Math.hypot(dx, dy);

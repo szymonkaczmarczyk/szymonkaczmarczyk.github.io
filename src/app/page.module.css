@@ -1,5 +1,7 @@
 .heroStage {
   position: relative;
+  --hero-words-size: clamp(112px, 19vw, 300px);
+  --hero-liquid-band: 120px;
 }
 
 .heroStage[data-liquid='on'] [data-liquid-pill] {
@@ -19,11 +21,18 @@
 }
 
 @media (max-width: 767px) {
+  .heroStage {
+    --hero-words-size: 84px;
+  }
+
   .heroCopy {
-    padding-top: 0;
-    align-content: end;
-    min-height: calc(100svh - var(--header-height) - var(--space-xl));
-    padding-bottom: var(--space-lg);
+    padding-top: var(--hero-liquid-band);
+  }
+}
+
+@media (max-width: 1023px) {
+  .heroCopy {
+    padding-bottom: calc(var(--hero-words-size) * 0.84 + var(--space-md));
   }
 }
 

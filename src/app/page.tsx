@@ -31,7 +31,7 @@ export default function HomePage() {
           <div className={styles.heroStage}>
             <HeroLiquid />
             <div className={`shell ${styles.heroCopy}`}>
-              <h1 id="hero-title" className={styles.heroTitle}>
+              <h1 id="hero-title" className={styles.heroTitle} data-liquid-avoid>
                 <span className={styles.line}>
                   <span>buduję strony,</span>
                 </span>
