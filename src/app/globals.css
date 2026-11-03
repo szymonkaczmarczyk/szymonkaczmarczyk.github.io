@@ -53,7 +53,7 @@
   --color-on-text: var(--color-bg);
   --color-on-accent: var(--color-ink);
   --color-focus: var(--color-sky);
-  --color-chrome: color-mix(in srgb, var(--color-bg) 78%, transparent);
+  --color-chrome: color-mix(in srgb, var(--color-bg) 58%, transparent);
 
   --font-display: 'Baloo 2 Variable', 'Baloo 2', system-ui, sans-serif;
   --font-body: 'DM Sans Variable', 'DM Sans', system-ui, sans-serif;

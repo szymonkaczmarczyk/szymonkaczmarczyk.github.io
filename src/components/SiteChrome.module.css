@@ -2,27 +2,22 @@
   position: sticky;
   top: 0;
   z-index: 50;
+  isolation: isolate;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 calc(-1 * var(--space-md)) 0;
+  z-index: -1;
   background: var(--color-chrome);
-  backdrop-filter: blur(20px) saturate(170%);
-  border-bottom: 1px solid transparent;
-}
-
-@supports (animation-timeline: scroll()) {
-  .header {
-    animation: header-edge linear both;
-    animation-timeline: scroll();
-    animation-range: 0 120px;
-  }
-}
-
-@keyframes header-edge {
-  to {
-    border-bottom-color: var(--color-line);
-  }
+  backdrop-filter: blur(14px) saturate(160%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 2 * var(--space-md)), transparent);
+  pointer-events: none;
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  .header {
+  .header::before {
     background: var(--color-bg);
     backdrop-filter: none;
   }
