@@ -1,0 +1,49 @@
+.bar {
+  padding-block: var(--space-md);
+}
+
+.bar :global(.button) {
+  padding: 6px 24px 6px 6px;
+}
+
+.backIcon {
+  transform: rotate(180deg);
+}
+
+.bar :global(.button:hover) .backIcon {
+  transform: rotate(180deg) translateX(3px);
+}
+
+.main {
+  display: grid;
+  gap: var(--space-md);
+  justify-items: start;
+  padding-block: var(--space-xl) var(--space-2xl);
+}
+
+.title {
+  max-width: 14ch;
+}
+
+.content {
+  display: grid;
+  gap: var(--space-md);
+  max-width: 720px;
+  margin-top: var(--space-md);
+  color: var(--color-muted);
+}
+
+.content > :global(.button) {
+  justify-self: start;
+}
+
+.content h2 {
+  margin-top: var(--space-md);
+  font-size: var(--size-h4);
+  color: var(--color-text);
+}
+
+.content ul {
+  margin: 0;
+  padding-left: var(--space-md);
+}

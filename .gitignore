@@ -1,0 +1,17 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+* 2
+* 2.*
+.env
+.env.*
+!.env.example
+CLAUDE.md
+AGENTS.md
+zasady-projektu.md
+.claude/
+.cursor/
+.codex/
