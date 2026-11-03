@@ -20,6 +20,8 @@ const focusAreas = [
   { title: 'sieci i bezpieczeństwo', text: 'jak internet działa pod spodem - sieci, bezpieczeństwo, infrastruktura' },
 ];
 
+const showreelStart = `(function(){var stage=document.querySelector('[data-screen]');var frame=stage&&stage.querySelector('[data-screen-frame]');var caption=stage&&stage.querySelector('figcaption');if(!frame||!caption||!frame.offsetWidth)return;var style=getComputedStyle(caption);var content=caption.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);document.documentElement.style.setProperty('--screen-start',String(content/frame.offsetWidth))})();`;
+
 const toolbox = ['TypeScript', 'Python', 'Next.js', 'Astro', 'React', 'GSAP', 'PostgreSQL', 'Docker', 'Linux', 'Figma'];
 
 export default function HomePage() {
@@ -63,6 +65,7 @@ export default function HomePage() {
             </div>
           </div>
           <Showreel />
+          <script dangerouslySetInnerHTML={{ __html: showreelStart }} />
         </section>
 
         <section id="prace" className={`shell ${styles.section}`} aria-labelledby="prace-title">

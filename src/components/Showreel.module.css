@@ -1,7 +1,6 @@
 .stage {
   margin: 0;
   --screen-inset: var(--gutter);
-  --screen-start: tan(atan2(calc(100vw - 2 * var(--screen-inset)), 100vw));
   --screen-growth: calc(2 * var(--screen-inset) * 0.625);
 }
 
@@ -14,8 +13,8 @@
 
 :global(.js-motion) .screen {
   margin-inline: 0;
-  border-radius: calc(var(--radius-media) / var(--screen-start));
-  transform: scale(var(--screen-start));
+  border-radius: calc(var(--radius-media) / var(--screen-start, 1));
+  transform: scale(var(--screen-start, 1));
   will-change: transform;
 }
 
