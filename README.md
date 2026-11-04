@@ -2,6 +2,8 @@
 
 > Strony i aplikacje, które się ruszają.
 
+Na żywo: **[szymonkaczmarczyk.is-a.dev](https://szymonkaczmarczyk.is-a.dev)**
+
 Moje portfolio jako programisty. Zamiast statycznych zrzutów pokazuje nagrania prawdziwych projektów
 uruchomionych lokalnie: kilkanaście sekund z każdej strony, z przewijaniem, kliknięciami i animacjami.
 Obok nagrań są dwie strony, które już działają w sieci, krótko o mnie i kontakt.

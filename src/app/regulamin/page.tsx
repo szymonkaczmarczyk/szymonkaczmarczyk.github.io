@@ -6,6 +6,14 @@ export const metadata: Metadata = {
   title: 'regulamin - Szymon Kaczmarczyk',
   description: 'zasady korzystania z portfolio Szymona Kaczmarczyka - prawa do nagrań, linki do stron zewnętrznych i kontakt',
   alternates: { canonical: '/regulamin/' },
+  openGraph: {
+    type: 'website',
+    locale: 'pl_PL',
+    url: '/regulamin/',
+    title: 'regulamin - Szymon Kaczmarczyk',
+    description: 'zasady korzystania z portfolio Szymona Kaczmarczyka - prawa do nagrań, linki do stron zewnętrznych i kontakt',
+    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Szymon Kaczmarczyk - portfolio' }],
+  },
 };
 
 export default function TermsPage() {

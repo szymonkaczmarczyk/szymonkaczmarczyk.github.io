@@ -1,4 +1,4 @@
-export const siteUrl = 'https://szymonkaczmarczyk.github.io';
+export const siteUrl = 'https://szymonkaczmarczyk.is-a.dev';
 
 export const owner = {
   name: 'Szymon Kaczmarczyk',

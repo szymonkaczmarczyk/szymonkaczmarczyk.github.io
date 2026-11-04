@@ -6,6 +6,14 @@ export const metadata: Metadata = {
   title: 'polityka prywatności - Szymon Kaczmarczyk',
   description: 'jak portfolio Szymona Kaczmarczyka obchodzi się z danymi - bez cookies, bez analityki i bez formularzy',
   alternates: { canonical: '/polityka-prywatnosci/' },
+  openGraph: {
+    type: 'website',
+    locale: 'pl_PL',
+    url: '/polityka-prywatnosci/',
+    title: 'polityka prywatności - Szymon Kaczmarczyk',
+    description: 'jak portfolio Szymona Kaczmarczyka obchodzi się z danymi - bez cookies, bez analityki i bez formularzy',
+    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Szymon Kaczmarczyk - portfolio' }],
+  },
 };
 
 export default function PrivacyPolicyPage() {
