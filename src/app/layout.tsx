@@ -10,7 +10,13 @@ export const metadata: Metadata = {
   title: 'Szymon Kaczmarczyk - strony i aplikacje, które się ruszają',
   description: 'portfolio Szymona Kaczmarczyka - nagrania stron i aplikacji z localhosta oraz dwie opublikowane strony do przeklikania na żywo',
   alternates: { canonical: '/' },
-  icons: { icon: '/favicon.ico' },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'pl_PL',
