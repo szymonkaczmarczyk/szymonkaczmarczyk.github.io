@@ -1,7 +1,7 @@
 ---
 import ProjectVideo from './ProjectVideo.astro';
 import ProjectPoster from './ProjectPoster.astro';
-import { chapterProjects } from '../data/projekty';
+import { chapterProjects, homeAnchorFor, projectHref, transitionNameFor } from '../data/projekty';
 
 const chapterTones = ['ink', 'accent'] as const;
 const wavePath = 'M0 96V52C120 30 220 70 360 48S600 18 760 44S1040 78 1200 46S1380 30 1440 40V96Z';
@@ -9,7 +9,7 @@ const wavePath = 'M0 96V52C120 30 220 70 360 48S600 18 760 44S1040 78 1200 46S13
 const chapters = chapterProjects.map((project, index) => ({
   project,
   number: index + 1,
-  anchor: `rozdzial-${project.slug}`,
+  anchor: homeAnchorFor(project.slug),
   tone: chapterTones[index % chapterTones.length],
 }));
 const chapterCount = chapters.length;
@@ -45,7 +45,7 @@ const chapterCount = chapters.length;
     {
       chapters.map((chapter) => (
         <article id={chapter.anchor} class="chapter" data-chapter data-tone={chapter.tone} aria-labelledby={`${chapter.anchor}-nazwa`}>
-          <div class="chapter__media">
+          <div class="chapter__media" style={`view-transition-name: ${transitionNameFor(chapter.project.slug)}`}>
             {chapter.project.media === 'video' ? (
               <ProjectVideo class="chapter__frame" slug={chapter.project.slug} label={`nagranie projektu ${chapter.project.name}`} />
             ) : (
@@ -60,7 +60,7 @@ const chapterCount = chapters.length;
               {chapter.project.name}
             </h3>
             <p class="chapter__tagline">{chapter.project.tagline}</p>
-            <a class="button button--paper" href={`/prace/${chapter.project.slug}/`}>
+            <a class="button button--paper" href={projectHref(chapter.project.slug)}>
               zobacz projekt<span class="visually-hidden"> {chapter.project.name}</span>
               <span class="button__arrow" aria-hidden="true">→</span>
             </a>

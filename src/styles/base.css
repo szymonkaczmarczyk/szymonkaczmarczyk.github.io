@@ -255,3 +255,18 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group(*) {
+  animation-duration: var(--duration-medium);
+  animation-timing-function: var(--ease-calm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}

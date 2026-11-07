@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
+import { projectHref, projects } from '../data/projekty';
 
-const publicPaths = ['/'];
+const publicPaths = ['/', ...projects.map((project) => projectHref(project.slug))];
 
 export const GET: APIRoute = ({ site }) => {
   const entries = publicPaths.map((path) => `  <url><loc>${new URL(path, site)}</loc></url>`).join('\n');

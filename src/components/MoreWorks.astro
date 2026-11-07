@@ -1,0 +1,154 @@
+---
+import ProjectVideo from './ProjectVideo.astro';
+import ProjectPoster from './ProjectPoster.astro';
+import { homeAnchorFor, moreProjects, projectHref, transitionNameFor } from '../data/projekty';
+import { formatClock, videoSeconds } from '../lib/videoDuration';
+
+const lastIndex = moreProjects.length - 1;
+const isWide = (index: number) => index % 3 === 0 || (index === lastIndex && index % 3 === 1);
+
+const works = moreProjects.map((project, index) => {
+  const seconds = project.media === 'video' ? videoSeconds(project.slug) : undefined;
+  return {
+    project,
+    wide: isWide(index),
+    anchor: homeAnchorFor(project.slug),
+    mediaNote: seconds === undefined ? 'zrzut ekranu' : `nagranie ${formatClock(seconds)}`,
+    mediaNoteLabel: seconds === undefined ? 'zrzut ekranu' : `nagranie trwa ${seconds} sekund`,
+  };
+});
+---
+
+<section id="wiecej" class="shell more" aria-labelledby="wiecej-title">
+  <h2 id="wiecej-title" class="more__title">więcej prac</h2>
+  <ul class="more__grid">
+    {
+      works.map((work) => (
+        <li id={work.anchor} class:list={['work', { 'work--wide': work.wide }]}>
+          <div class="work__media" style={`view-transition-name: ${transitionNameFor(work.project.slug)}`}>
+            {work.project.media === 'video' ? (
+              <ProjectVideo class="work__frame" slug={work.project.slug} label={`nagranie projektu ${work.project.name}`} />
+            ) : (
+              <ProjectPoster class="work__frame" slug={work.project.slug} alt={`zrzut ekranu strony ${work.project.name}, ${work.project.kind}`} />
+            )}
+          </div>
+          <div class="work__caption">
+            <p class="hand work__note">
+              <span aria-hidden="true">{work.mediaNote}</span>
+              <span class="visually-hidden">{work.mediaNoteLabel}</span>
+            </p>
+            <h3 class="work__name">
+              <a class="work__link" href={projectHref(work.project.slug)}>
+                {work.project.name}
+              </a>
+            </h3>
+            <p class="work__tagline">{work.project.tagline}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .more {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--section-gap) 0;
+  }
+
+  .more__grid {
+    display: grid;
+    gap: var(--space-8) var(--space-4);
+    padding: 0;
+    list-style: none;
+  }
+
+  .work {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+    scroll-margin-top: var(--space-4);
+  }
+
+  .work__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--color-ink);
+  }
+
+  .work__media :global(.work__frame) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .work__media :global(.project-video__toggle) {
+    z-index: 2;
+  }
+
+  .work__caption {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .work__note {
+    color: var(--color-accent);
+  }
+
+  .work__name {
+    font-size: var(--text-h3);
+  }
+
+  .work__link {
+    text-decoration: none;
+  }
+
+  .work__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .work__link:focus-visible {
+    outline: none;
+  }
+
+  .work:has(.work__link:focus-visible) {
+    outline: var(--focus-ring);
+    outline-offset: var(--space-1);
+    border-radius: var(--radius);
+  }
+
+  .work__tagline {
+    color: var(--color-ink-muted);
+    letter-spacing: var(--tracking-body);
+  }
+
+  @media (hover: hover) {
+    .work:hover .work__link {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.12em;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .more__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .work--wide {
+      grid-column: 1 / -1;
+    }
+
+    .work__media {
+      aspect-ratio: 16 / 10;
+    }
+  }
+</style>

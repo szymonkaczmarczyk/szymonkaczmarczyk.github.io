@@ -3,16 +3,17 @@ type Props = {
   slug: string;
   alt: string;
   class?: string;
+  priority?: boolean;
 };
 
-const { slug, alt, class: className } = Astro.props;
+const { slug, alt, class: className, priority = false } = Astro.props;
 const posterBase = `/video/${slug}`;
 ---
 
 <picture class:list={['project-poster', className]}>
   <source srcset={`${posterBase}-pion.webp`} media="(max-width: 767px)" type="image/webp" />
   <source srcset={`${posterBase}.webp`} type="image/webp" />
-  <img src={`${posterBase}.jpg`} alt={alt} loading="lazy" decoding="async" />
+  <img src={`${posterBase}.jpg`} alt={alt} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async" />
 </picture>
 
 <style>

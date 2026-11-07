@@ -164,3 +164,20 @@ export const moreProjects = projects.filter((project) => !chapterSlugs.includes(
 export const aboutPlayableProject = bySlug(aboutPlayableSlug);
 export const deskLaptopProject = bySlug(deskScreenSlugs.laptop);
 export const deskPhoneProject = bySlug(deskScreenSlugs.phone);
+
+const chapterAnchor = (slug: string) => `rozdzial-${slug}`;
+const moreAnchor = (slug: string) => `praca-${slug}`;
+
+export const homeAnchorFor = (slug: string) => {
+  if (chapterSlugs.includes(slug)) return chapterAnchor(slug);
+  if (slug === aboutPlayableSlug) return 'o-mnie';
+  return moreAnchor(slug);
+};
+
+export const projectHref = (slug: string) => `/prace/${slug}/`;
+export const transitionNameFor = (slug: string) => `projekt-${slug}`;
+
+export const nextProjectAfter = (slug: string) => {
+  const index = projects.findIndex((project) => project.slug === slug);
+  return projects[(index + 1) % projects.length];
+};

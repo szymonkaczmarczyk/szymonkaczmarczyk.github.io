@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import StartSection from '../components/StartSection.astro';
 import CinemaChapters from '../components/CinemaChapters.astro';
-import { moreProjects } from '../data/projekty';
+import MoreWorks from '../components/MoreWorks.astro';
 import { aboutCopy, contactCopy, owner } from '../data/strona';
 ---
 
@@ -11,19 +11,7 @@ import { aboutCopy, contactCopy, owner } from '../data/strona';
 
   <CinemaChapters />
 
-  <section id="wiecej" class="shell page-section" aria-labelledby="wiecej-title">
-    <h2 id="wiecej-title">więcej prac</h2>
-    <ul class="project-rows">
-      {
-        moreProjects.map((project) => (
-          <li class="project-row">
-            <h4>{project.name}</h4>
-            <p class="small">{project.tagline}</p>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  <MoreWorks />
 
   <section id="o-mnie" class="shell page-section" aria-labelledby="o-mnie-title">
     <h2 id="o-mnie-title">{aboutCopy.heading}</h2>
@@ -47,19 +35,6 @@ import { aboutCopy, contactCopy, owner } from '../data/strona';
     display: grid;
     gap: var(--space-3);
     padding-block: var(--section-gap) 0;
-  }
-
-  .project-rows {
-    display: grid;
-    padding: 0;
-    list-style: none;
-  }
-
-  .project-row {
-    display: grid;
-    gap: var(--space-1);
-    padding-block: var(--space-3);
-    border-top: var(--border-thin) solid var(--color-line);
   }
 
   .contact-links {
