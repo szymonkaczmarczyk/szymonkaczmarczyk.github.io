@@ -2,7 +2,7 @@ import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize } from 'node:path';
 
-const root = new URL('../out/', import.meta.url).pathname;
+const root = new URL('../dist/', import.meta.url).pathname;
 const port = Number(process.env.PORT ?? 4801);
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',

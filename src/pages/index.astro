@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { aboutPlayableProject, chapterProjects, moreProjects } from '../data/projekty';
+import { owner } from '../data/strona';
+---
+
+<BaseLayout>
+  <section id="start" class="shell page-section start" aria-labelledby="start-title">
+    <h1 id="start-title">{owner.name}</h1>
+    <p class="lead">strony i aplikacje pokazane na nagraniach</p>
+    <p class="signature">{owner.firstName}</p>
+    <a class="button" href="#prace">zobacz prace <span class="button__arrow" aria-hidden="true">→</span></a>
+  </section>
+
+  <section id="prace" class="shell page-section" aria-labelledby="prace-title">
+    <h2 id="prace-title">prace</h2>
+    <ol class="project-rows">
+      {
+        chapterProjects.map((project, index) => (
+          <li class="project-row">
+            <p class="hand project-row__note">rozdział {index + 1} z {chapterProjects.length}</p>
+            <h3>{project.name}</h3>
+            <p>{project.summary}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section id="wiecej" class="shell page-section" aria-labelledby="wiecej-title">
+    <h2 id="wiecej-title">więcej prac</h2>
+    <ul class="project-rows">
+      {
+        moreProjects.map((project) => (
+          <li class="project-row">
+            <h4>{project.name}</h4>
+            <p class="small">{project.kind}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section id="o-mnie" class="shell page-section" aria-labelledby="o-mnie-title">
+    <h2 id="o-mnie-title">o mnie</h2>
+    <p class="lead">tu pojawi się zdjęcie, nagranie {aboutPlayableProject.name} i kilka zdań.</p>
+  </section>
+
+  <section id="kontakt" class="shell page-section" aria-labelledby="kontakt-title">
+    <h2 id="kontakt-title">kontakt</h2>
+    <a class="button button--quiet" href={`mailto:${owner.email}`}>napisz na {owner.email}</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-section {
+    display: grid;
+    gap: var(--space-3);
+    padding-block: var(--section-gap) 0;
+  }
+
+  .start {
+    justify-items: start;
+    padding-block-start: var(--space-8);
+  }
+
+  .project-rows {
+    display: grid;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project-row {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    border-top: var(--border-thin) solid var(--color-line);
+  }
+
+  .project-row__note {
+    color: var(--color-accent);
+  }
+</style>

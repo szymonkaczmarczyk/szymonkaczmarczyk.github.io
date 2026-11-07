@@ -1,0 +1,80 @@
+:root {
+  --color-paper: #f4eee3;
+  --color-ink: #2b2620;
+  --color-ink-muted: #7b6f5d;
+  --color-accent: #2f6b4f;
+  --color-sun: #f2b66b;
+  --color-desk: #c99f72;
+  --color-desk-edge: #b88a5c;
+  --color-sage: #8fae9a;
+  --color-pot: #b7835f;
+  --color-leaf: #4f7a5c;
+  --color-cloud: #fbf7ef;
+  --color-line: color-mix(in srgb, var(--color-ink) 16%, transparent);
+
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-hand: 'Caveat', 'Segoe Print', cursive;
+  --font-signature: 'Mrs Saint Delafield', 'Snell Roundhand', cursive;
+
+  --text-h1: 44px;
+  --text-h2: 32px;
+  --text-h3: 28px;
+  --text-h4: 18px;
+  --text-body-large: 16px;
+  --text-body: 16px;
+  --text-small: 14px;
+  --text-hand: 24px;
+  --text-signature: 56px;
+
+  --leading-heading: 1.1;
+  --leading-body: 1.6;
+  --tracking-heading: -0.06em;
+  --tracking-body: -0.02em;
+  --tracking-caps: 0.01em;
+  --measure: 60ch;
+
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-8: 64px;
+  --space-10: 80px;
+  --space-12: 96px;
+  --space-16: 128px;
+
+  --gutter: var(--space-2);
+  --section-gap: var(--space-10);
+  --shell-max: 1280px;
+  --radius: 8px;
+  --border-thin: 1px;
+  --focus-ring: 3px solid var(--color-accent);
+  --header-height: var(--space-8);
+
+  --ease-calm: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-short: 200ms;
+  --duration-medium: 600ms;
+  --duration-long: 1200ms;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --text-h1: 64px;
+    --text-h2: 56px;
+    --text-h3: 32px;
+    --text-h4: 20px;
+    --text-body-large: 18px;
+    --text-signature: 72px;
+    --gutter: var(--space-4);
+    --section-gap: var(--space-12);
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --text-h1: 80px;
+    --gutter: var(--space-6);
+    --section-gap: var(--space-16);
+  }
+}

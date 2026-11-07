@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="nie ma takiej strony - Szymon Kaczmarczyk" description="ta strona nie istnieje albo zmieniła adres">
+  <section class="shell not-found" aria-labelledby="not-found-title">
+    <p class="hand not-found__note">tu nic nie ma</p>
+    <h1 id="not-found-title">nie ma takiej strony</h1>
+    <p class="lead">adres mógł się zmienić. wszystkie prace są na stronie głównej.</p>
+    <a class="button" href="/">wróć na stronę główną <span class="button__arrow" aria-hidden="true">→</span></a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    padding-block: var(--space-12);
+  }
+
+  .not-found__note {
+    color: var(--color-accent);
+  }
+</style>
