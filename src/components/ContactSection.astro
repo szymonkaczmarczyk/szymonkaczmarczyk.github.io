@@ -1,0 +1,82 @@
+---
+import { contactCopy, legalPages, owner } from '../data/strona';
+
+const profiles = [
+  { href: owner.github, label: 'GitHub' },
+  { href: owner.linkedin, label: 'LinkedIn' },
+];
+---
+
+<section id="kontakt" class="shell contact" aria-labelledby="kontakt-title">
+  <h2 id="kontakt-title" class="contact__title">{contactCopy.heading}</h2>
+  <p class="lead">{contactCopy.text}</p>
+
+  <div class="contact__actions">
+    <a class="button" href={`mailto:${owner.email}`}>
+      {contactCopy.actionLabel}
+      <span class="button__arrow" aria-hidden="true">→</span>
+    </a>
+    <p class="contact__email">{owner.email}</p>
+  </div>
+
+  <ul class="contact__profiles">
+    {
+      profiles.map((profile) => (
+        <li>
+          <a class="button button--quiet" href={profile.href} rel="noopener noreferrer">
+            {profile.label}
+            <span aria-hidden="true">↗</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="small contact__privacy">
+    {contactCopy.privacyNote} {contactCopy.privacyLinkLead} <a href={legalPages.privacy.href}>{contactCopy.privacyLinkLabel}</a>.
+  </p>
+</section>
+
+<style>
+  .contact {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    padding-block: var(--section-gap) 0;
+    scroll-margin-top: var(--space-4);
+  }
+
+  .contact__title {
+    max-width: 18ch;
+  }
+
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+    margin-top: var(--space-1);
+  }
+
+  .contact__email {
+    color: var(--color-ink-muted);
+    letter-spacing: var(--tracking-body);
+    user-select: all;
+  }
+
+  .contact__profiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact__privacy {
+    color: var(--color-ink-muted);
+  }
+
+  .contact__privacy a {
+    color: var(--color-ink);
+  }
+</style>

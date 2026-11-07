@@ -130,10 +130,11 @@ a {
 
 .signature {
   font-family: var(--font-signature);
-  font-size: var(--text-signature);
+  font-size: min(var(--text-signature), 14vw);
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0;
+  white-space: nowrap;
   color: var(--color-accent);
   padding-inline-start: 0.1em;
 }
@@ -263,6 +264,86 @@ a {
 ::view-transition-group(*) {
   animation-duration: var(--duration-medium);
   animation-timing-function: var(--ease-calm);
+}
+
+.site-header {
+  view-transition-name: naglowek;
+}
+
+::view-transition-old(root) {
+  animation: page-leave var(--duration-short) var(--ease-calm) both;
+}
+
+::view-transition-new(root) {
+  animation: page-enter var(--duration-medium) var(--ease-calm) both;
+}
+
+@keyframes page-leave {
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--space-1) * -1));
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+}
+
+.reveal-frame {
+  --reveal-radius: 0px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal-frame {
+      animation-name: frame-open, frame-close;
+      animation-timing-function: linear;
+      animation-fill-mode: both, forwards;
+      animation-timeline: view(), view();
+      animation-range: entry 0% cover 40%, exit 20% exit 100%;
+    }
+
+    .reveal-line {
+      animation-name: line-draw;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 50%;
+    }
+  }
+}
+
+@keyframes frame-open {
+  from {
+    clip-path: inset(8% 6% round var(--space-3));
+  }
+
+  to {
+    clip-path: inset(0 0 round var(--reveal-radius));
+  }
+}
+
+@keyframes frame-close {
+  from {
+    clip-path: inset(0 0 round var(--reveal-radius));
+  }
+
+  to {
+    clip-path: inset(4% 3% round var(--space-2));
+  }
+}
+
+@keyframes line-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

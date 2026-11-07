@@ -1,0 +1,126 @@
+---
+import ProjectVideo from './ProjectVideo.astro';
+import { aboutCopy, owner } from '../data/strona';
+import { aboutPlayableProject, projectHref, transitionNameFor } from '../data/projekty';
+---
+
+<section id="o-mnie" class="shell about" aria-labelledby="o-mnie-title">
+  <picture class="about__photo">
+    <source srcset={`${aboutCopy.photo}.webp`} type="image/webp" />
+    <img src={`${aboutCopy.photo}.jpg`} alt={aboutCopy.photoAlt} width="368" height="460" loading="lazy" decoding="async" />
+  </picture>
+
+  <div class="about__copy">
+    <h2 id="o-mnie-title">{aboutCopy.heading}</h2>
+    <p class="lead">{aboutCopy.text}</p>
+    <p class="signature about__signature" aria-hidden="true">{owner.name}</p>
+  </div>
+
+  <figure class="about__playable">
+    <div class="about__media reveal-frame" style={`view-transition-name: ${transitionNameFor(aboutPlayableProject.slug)}`}>
+      <ProjectVideo class="about__frame" slug={aboutPlayableProject.slug} label={`nagranie projektu ${aboutPlayableProject.name}`} />
+    </div>
+    <figcaption class="about__caption">
+      <span class="small">{aboutCopy.videoCaption}</span>
+      <a class="about__link" href={projectHref(aboutPlayableProject.slug)}>
+        {aboutCopy.videoLinkLabel}<span class="visually-hidden"> {aboutPlayableProject.name}</span>
+        <span class="button__arrow" aria-hidden="true">→</span>
+      </a>
+    </figcaption>
+  </figure>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--section-gap) 0;
+    scroll-margin-top: var(--space-4);
+  }
+
+  .about__photo {
+    display: block;
+    width: 100%;
+    max-width: 368px;
+  }
+
+  .about__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+  }
+
+  .about__copy {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .about__signature {
+    color: var(--color-accent);
+  }
+
+  .about__playable {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .about__media {
+    --reveal-radius: var(--radius);
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--color-ink);
+  }
+
+  .about__media :global(.about__frame) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .about__caption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-3);
+    color: var(--color-ink-muted);
+  }
+
+  .about__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-height: 44px;
+    color: var(--color-ink);
+    font-weight: 600;
+    letter-spacing: var(--tracking-body);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .about__link:hover .button__arrow {
+      transform: translateX(4px);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .about {
+      grid-template-columns: minmax(0, 368px) minmax(0, 1fr);
+      column-gap: var(--space-8);
+    }
+
+    .about__copy {
+      align-content: center;
+    }
+
+    .about__playable {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

@@ -1,0 +1,31 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { owner } from '../data/strona';
+---
+
+<LegalPage heading="polityka prywatności" description="jak ta strona obchodzi się z danymi - bez cookies, bez analityki i bez formularzy">
+  <p>to prywatne portfolio. nie prowadzę przez nie działalności gospodarczej i nie zbieram danych poza tym, co opisuję niżej.</p>
+
+  <h2>administrator danych</h2>
+  <p>administratorem jest {owner.name}, kontakt: <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>
+
+  <h2>czego strona nie robi</h2>
+  <p>strona nie używa cookies, analityki, pikseli reklamowych, formularzy ani zewnętrznych czcionek. nie zapisuje też niczego w pamięci przeglądarki. nagrania, zdjęcia i czcionki ładują się z tego samego serwera co strona.</p>
+
+  <h2>hosting</h2>
+  <p>stronę udostępnia GitHub Pages (GitHub, Inc., USA). serwer może zapisywać techniczne logi, w tym adres IP, żeby strona działała i była bezpieczna. GitHub uczestniczy w programie EU-US Data Privacy Framework i opisuje to w swojej polityce prywatności.</p>
+
+  <h2>strony zewnętrzne</h2>
+  <p>przyciski „otwórz stronę” oraz linki do GitHuba i LinkedIna prowadzą do innych serwisów. działają one według własnych polityk prywatności, a dane zbierają dopiero wtedy, gdy w nie klikniesz.</p>
+
+  <h2>kontakt mailowy</h2>
+  <p>jeśli napiszesz e-mail, przetwarzam twój adres i treść wiadomości tylko po to, żeby odpowiedzieć (art. 6 ust. 1 lit. f RODO). przechowuję je do końca naszej rozmowy, a potem najdłużej 12 miesięcy, chyba że poprosisz o wcześniejsze usunięcie.</p>
+
+  <h2>twoje prawa</h2>
+  <ul>
+    <li>dostęp do danych, ich sprostowanie, usunięcie lub ograniczenie przetwarzania</li>
+    <li>sprzeciw wobec przetwarzania i przeniesienie danych</li>
+    <li>skarga do Prezesa Urzędu Ochrony Danych Osobowych</li>
+  </ul>
+  <p>żeby skorzystać z tych praw, napisz na <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>
+</LegalPage>

@@ -3,7 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import StartSection from '../components/StartSection.astro';
 import CinemaChapters from '../components/CinemaChapters.astro';
 import MoreWorks from '../components/MoreWorks.astro';
-import { aboutCopy, contactCopy, owner } from '../data/strona';
+import AboutSection from '../components/AboutSection.astro';
+import ContactSection from '../components/ContactSection.astro';
 ---
 
 <BaseLayout>
@@ -13,39 +14,7 @@ import { aboutCopy, contactCopy, owner } from '../data/strona';
 
   <MoreWorks />
 
-  <section id="o-mnie" class="shell page-section" aria-labelledby="o-mnie-title">
-    <h2 id="o-mnie-title">{aboutCopy.heading}</h2>
-    <p class="lead">{aboutCopy.text}</p>
-    <p class="small">{aboutCopy.videoCaption}</p>
-  </section>
+  <AboutSection />
 
-  <section id="kontakt" class="shell page-section" aria-labelledby="kontakt-title">
-    <h2 id="kontakt-title">{contactCopy.heading}</h2>
-    <p class="lead">{contactCopy.text}</p>
-    <a class="button" href={`mailto:${owner.email}`}>{contactCopy.actionLabel} <span class="button__arrow" aria-hidden="true">→</span></a>
-    <ul class="contact-links">
-      <li><a class="button button--quiet" href={owner.github} rel="noopener noreferrer">GitHub</a></li>
-      <li><a class="button button--quiet" href={owner.linkedin} rel="noopener noreferrer">LinkedIn</a></li>
-    </ul>
-  </section>
+  <ContactSection />
 </BaseLayout>
-
-<style>
-  .page-section {
-    display: grid;
-    gap: var(--space-3);
-    padding-block: var(--section-gap) 0;
-  }
-
-  .contact-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    padding: 0;
-    list-style: none;
-  }
-
-  .page-section > .button {
-    justify-self: start;
-  }
-</style>

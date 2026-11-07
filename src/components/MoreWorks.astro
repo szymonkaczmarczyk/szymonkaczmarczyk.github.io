@@ -2,21 +2,15 @@
 import ProjectVideo from './ProjectVideo.astro';
 import ProjectPoster from './ProjectPoster.astro';
 import { homeAnchorFor, moreProjects, projectHref, transitionNameFor } from '../data/projekty';
-import { formatClock, videoSeconds } from '../lib/videoDuration';
 
 const lastIndex = moreProjects.length - 1;
 const isWide = (index: number) => index % 3 === 0 || (index === lastIndex && index % 3 === 1);
 
-const works = moreProjects.map((project, index) => {
-  const seconds = project.media === 'video' ? videoSeconds(project.slug) : undefined;
-  return {
-    project,
-    wide: isWide(index),
-    anchor: homeAnchorFor(project.slug),
-    mediaNote: seconds === undefined ? 'zrzut ekranu' : `nagranie ${formatClock(seconds)}`,
-    mediaNoteLabel: seconds === undefined ? 'zrzut ekranu' : `nagranie trwa ${seconds} sekund`,
-  };
-});
+const works = moreProjects.map((project, index) => ({
+  project,
+  wide: isWide(index),
+  anchor: homeAnchorFor(project.slug),
+}));
 ---
 
 <section id="wiecej" class="shell more" aria-labelledby="wiecej-title">
@@ -25,7 +19,7 @@ const works = moreProjects.map((project, index) => {
     {
       works.map((work) => (
         <li id={work.anchor} class:list={['work', { 'work--wide': work.wide }]}>
-          <div class="work__media" style={`view-transition-name: ${transitionNameFor(work.project.slug)}`}>
+          <div class="work__media reveal-frame" style={`view-transition-name: ${transitionNameFor(work.project.slug)}`}>
             {work.project.media === 'video' ? (
               <ProjectVideo class="work__frame" slug={work.project.slug} label={`nagranie projektu ${work.project.name}`} />
             ) : (
@@ -33,10 +27,6 @@ const works = moreProjects.map((project, index) => {
             )}
           </div>
           <div class="work__caption">
-            <p class="hand work__note">
-              <span aria-hidden="true">{work.mediaNote}</span>
-              <span class="visually-hidden">{work.mediaNoteLabel}</span>
-            </p>
             <h3 class="work__name">
               <a class="work__link" href={projectHref(work.project.slug)}>
                 {work.project.name}
@@ -73,8 +63,9 @@ const works = moreProjects.map((project, index) => {
   }
 
   .work__media {
+    --reveal-radius: var(--radius);
     position: relative;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 16 / 10;
     overflow: hidden;
     border-radius: var(--radius);
     background: var(--color-ink);
@@ -87,17 +78,9 @@ const works = moreProjects.map((project, index) => {
     height: 100%;
   }
 
-  .work__media :global(.project-video__toggle) {
-    z-index: 2;
-  }
-
   .work__caption {
     display: grid;
     gap: var(--space-1);
-  }
-
-  .work__note {
-    color: var(--color-accent);
   }
 
   .work__name {
@@ -145,10 +128,6 @@ const works = moreProjects.map((project, index) => {
 
     .work--wide {
       grid-column: 1 / -1;
-    }
-
-    .work__media {
-      aspect-ratio: 16 / 10;
     }
   }
 </style>

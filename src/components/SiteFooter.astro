@@ -1,5 +1,5 @@
 ---
-import { owner } from '../data/strona';
+import { legalPages, owner } from '../data/strona';
 
 const currentYear = new Date().getFullYear();
 ---
@@ -8,8 +8,8 @@ const currentYear = new Date().getFullYear();
   <div class="shell site-footer__inner">
     <p class="small">{owner.name}, {currentYear}</p>
     <ul class="site-footer__links small">
-      <li><a href="/polityka-prywatnosci/">polityka prywatności</a></li>
-      <li><a href="/regulamin/">regulamin</a></li>
+      <li><a href={legalPages.privacy.href}>{legalPages.privacy.label}</a></li>
+      <li><a href={legalPages.terms.href}>{legalPages.terms.label}</a></li>
       <li><a href={owner.github} rel="noopener noreferrer">github</a></li>
       <li><a href={owner.linkedin} rel="noopener noreferrer">linkedin</a></li>
     </ul>

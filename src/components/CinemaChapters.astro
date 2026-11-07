@@ -4,6 +4,7 @@ import ProjectPoster from './ProjectPoster.astro';
 import { chapterProjects, homeAnchorFor, projectHref, transitionNameFor } from '../data/projekty';
 
 const chapterTones = ['ink', 'accent'] as const;
+const dividerPath = 'M0 22C140 8 260 34 420 20S700 6 860 22S1160 36 1300 18S1400 14 1440 20';
 const wavePath = 'M0 96V52C120 30 220 70 360 48S600 18 760 44S1040 78 1200 46S1380 30 1440 40V96Z';
 
 const chapters = chapterProjects.map((project, index) => ({
@@ -44,8 +45,16 @@ const chapterCount = chapters.length;
 
     {
       chapters.map((chapter) => (
+        <>
+        {chapter.number > 1 && (
+          <div class="chapter-divider" aria-hidden="true">
+            <svg class="chapter-divider__line" viewBox="0 0 1440 40" preserveAspectRatio="none" focusable="false">
+              <path class="reveal-line" d={dividerPath} pathLength="1" />
+            </svg>
+          </div>
+        )}
         <article id={chapter.anchor} class="chapter" data-chapter data-tone={chapter.tone} aria-labelledby={`${chapter.anchor}-nazwa`}>
-          <div class="chapter__media" style={`view-transition-name: ${transitionNameFor(chapter.project.slug)}`}>
+          <div class="chapter__media reveal-frame" style={`view-transition-name: ${transitionNameFor(chapter.project.slug)}`}>
             {chapter.project.media === 'video' ? (
               <ProjectVideo class="chapter__frame" slug={chapter.project.slug} label={`nagranie projektu ${chapter.project.name}`} />
             ) : (
@@ -66,6 +75,7 @@ const chapterCount = chapters.length;
             </a>
           </div>
         </article>
+        </>
       ))
     }
   </div>
@@ -153,15 +163,26 @@ const chapterCount = chapters.length;
     scroll-margin-top: 44px;
   }
 
-  .chapter + .chapter {
-    margin-top: var(--space-8);
+  .chapter-divider {
+    padding: var(--space-6) var(--gutter);
+  }
+
+  .chapter-divider__line {
+    display: block;
+    width: 100%;
+    height: 40px;
+    overflow: visible;
+    fill: none;
+    stroke: color-mix(in srgb, var(--color-paper) 45%, transparent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
   }
 
   .chapter__media {
     position: relative;
     width: 100%;
-    aspect-ratio: 9 / 16;
-    max-height: 68svh;
+    aspect-ratio: 16 / 10;
     background: var(--color-ink);
   }
 
@@ -197,12 +218,6 @@ const chapterCount = chapters.length;
     margin-top: var(--space-1);
   }
 
-  @media (min-width: 768px) {
-    .chapter__media {
-      aspect-ratio: 16 / 10;
-      max-height: calc(100svh - 44px);
-    }
-  }
 
   @media (min-width: 1024px) {
     .chapter__caption {

@@ -4,6 +4,7 @@ import { extname, join, normalize } from 'node:path';
 
 const root = new URL('../dist/', import.meta.url).pathname;
 const port = Number(process.env.PORT ?? 4801);
+const host = process.env.HOST ?? '127.0.0.1';
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript',
@@ -47,4 +48,4 @@ createServer((request, response) => {
   const file = resolveFile(request.url ?? '/');
   if (file && existsSync(file)) sendFile(request, response, file, 200);
   else sendFile(request, response, join(root, '404.html'), 404);
-}).listen(port, '127.0.0.1', () => console.log(`podgląd: http://127.0.0.1:${port}/`));
+}).listen(port, host, () => console.log(`podgląd: http://${host}:${port}/`));

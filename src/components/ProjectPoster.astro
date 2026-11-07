@@ -11,7 +11,6 @@ const posterBase = `/video/${slug}`;
 ---
 
 <picture class:list={['project-poster', className]}>
-  <source srcset={`${posterBase}-pion.webp`} media="(max-width: 767px)" type="image/webp" />
   <source srcset={`${posterBase}.webp`} type="image/webp" />
   <img src={`${posterBase}.jpg`} alt={alt} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async" />
 </picture>

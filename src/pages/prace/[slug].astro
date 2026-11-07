@@ -3,7 +3,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectVideo from '../../components/ProjectVideo.astro';
 import ProjectPoster from '../../components/ProjectPoster.astro';
 import { chapterSlugs, homeAnchorFor, nextProjectAfter, projectHref, projects, transitionNameFor, type Project } from '../../data/projekty';
-import { formatClock, videoSeconds } from '../../lib/videoDuration';
 import { owner } from '../../data/strona';
 
 export const getStaticPaths = () => projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
@@ -16,9 +15,7 @@ const backHref = `/#${homeAnchorFor(project.slug)}`;
 const pageTitle = `${project.name} - ${project.kind} - ${owner.name}`;
 const siteHost = project.url ? new URL(project.url).host : undefined;
 const chapterIndex = chapterSlugs.indexOf(project.slug);
-const seconds = project.media === 'video' ? videoSeconds(project.slug) : undefined;
-const mediaNote = seconds === undefined ? 'zrzut ekranu' : `nagranie ${formatClock(seconds)}`;
-const introNote = chapterIndex >= 0 ? `rozdział ${chapterIndex + 1} z ${chapterSlugs.length}` : mediaNote;
+const chapterNote = chapterIndex >= 0 ? `rozdział ${chapterIndex + 1} z ${chapterSlugs.length}` : undefined;
 ---
 
 <BaseLayout title={pageTitle} description={project.tagline}>
@@ -28,7 +25,7 @@ const introNote = chapterIndex >= 0 ? `rozdział ${chapterIndex + 1} z ${chapter
         <span class="project__back-arrow" aria-hidden="true">←</span>
         wszystkie prace
       </a>
-      <p class="hand project__note">{introNote}</p>
+      {chapterNote && <p class="hand project__note">{chapterNote}</p>}
       <h1 id="projekt-nazwa" class="project__name">{project.name}</h1>
       <p class="lead project__tagline">{project.tagline}</p>
     </header>
@@ -128,8 +125,7 @@ const introNote = chapterIndex >= 0 ? `rozdział ${chapterIndex + 1} z ${chapter
   .project__media {
     position: relative;
     width: 100%;
-    aspect-ratio: 9 / 16;
-    max-height: 68svh;
+    aspect-ratio: 16 / 10;
     background: var(--color-ink);
   }
 
@@ -231,11 +227,6 @@ const introNote = chapterIndex >= 0 ? `rozdział ${chapterIndex + 1} z ${chapter
   }
 
   @media (min-width: 768px) {
-    .project__media {
-      aspect-ratio: 16 / 10;
-      max-height: 80svh;
-    }
-
     .project__fact {
       grid-template-columns: 200px minmax(0, 1fr);
       gap: var(--space-4);

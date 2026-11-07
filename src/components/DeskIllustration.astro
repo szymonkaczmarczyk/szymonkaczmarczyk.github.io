@@ -38,9 +38,7 @@ import { deskLaptopProject as laptopProject, deskPhoneProject as phoneProject } 
     class="desk__laptop-screen"
     slug={laptopProject.slug}
     label={`nagranie strony ${laptopProject.name} na ekranie laptopa`}
-    orientation="landscape"
     priority
-    compact
   />
 
   <picture class="desk__phone-screen">
@@ -54,6 +52,20 @@ import { deskLaptopProject as laptopProject, deskPhoneProject as phoneProject } 
     position: relative;
     width: 100%;
     aspect-ratio: 800 / 560;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .desk {
+      animation: desk-enter var(--duration-long) var(--ease-calm) 200ms both;
+    }
+  }
+
+  @keyframes desk-enter {
+    from {
+      opacity: 0.4;
+      filter: blur(12px);
+      transform: scale(1.03);
+    }
   }
 
   .desk__drawing {

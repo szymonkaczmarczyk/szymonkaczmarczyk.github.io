@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { legalPages, owner } from '../data/strona';
+
+type Props = {
+  heading: string;
+  description: string;
+};
+
+const { heading, description } = Astro.props;
+---
+
+<BaseLayout title={`${heading} - ${owner.name}`} description={description}>
+  <article class="shell legal" aria-labelledby="legal-title">
+    <a class="legal__back" href="/">
+      <span class="legal__back-arrow" aria-hidden="true">←</span>
+      strona główna
+    </a>
+    <p class="hand legal__note">informacje prawne</p>
+    <h1 id="legal-title" class="legal__title">{heading}</h1>
+    <p class="small legal__updated">
+      ostatnia zmiana: <time datetime={legalPages.updatedOn}>{legalPages.updatedLabel}</time>
+    </p>
+    <div class="legal__body">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+    padding-block: var(--space-4) 0;
+  }
+
+  .legal__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-height: 44px;
+    margin-bottom: var(--space-2);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .legal__back-arrow {
+    transition: transform var(--duration-short) var(--ease-calm);
+  }
+
+  .legal__note {
+    color: var(--color-accent);
+  }
+
+  .legal__updated {
+    color: var(--color-ink-muted);
+  }
+
+  .legal__body {
+    display: grid;
+    gap: var(--space-2);
+    max-width: var(--measure);
+    margin-top: var(--space-4);
+  }
+
+  .legal__body :global(h2) {
+    margin-top: var(--space-4);
+    font-size: var(--text-h4);
+    line-height: var(--leading-heading);
+  }
+
+  .legal__body :global(p),
+  .legal__body :global(li) {
+    font-size: var(--text-body-large);
+    letter-spacing: var(--tracking-body);
+  }
+
+  .legal__body :global(ul) {
+    display: grid;
+    gap: var(--space-1);
+    padding-left: var(--space-3);
+  }
+
+  @media (hover: hover) {
+    .legal__back:hover .legal__back-arrow {
+      transform: translateX(-4px);
+    }
+  }
+</style>

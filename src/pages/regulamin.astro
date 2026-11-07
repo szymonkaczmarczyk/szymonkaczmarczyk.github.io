@@ -1,0 +1,24 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { legalPages, owner } from '../data/strona';
+---
+
+<LegalPage heading="regulamin" description="zasady korzystania z portfolio Szymona Kaczmarczyka - charakter strony, prawa autorskie i kontakt">
+  <h2>właściciel strony</h2>
+  <p>stronę prowadzi prywatnie {owner.name}.</p>
+
+  <h2>charakter strony</h2>
+  <p>portfolio ma charakter informacyjny i niekomercyjny. nie sprzedaje usług przez internet i nie zawiera umów na odległość.</p>
+
+  <h2>prawa autorskie</h2>
+  <p>kod źródłowy strony jest dostępny na licencji MIT. nagrania, plakaty, zdjęcia i teksty należą do właściciela strony i nie są objęte tą licencją. kopiowanie ich poza dozwolony użytek wymaga zgody.</p>
+
+  <h2>strony zewnętrzne</h2>
+  <p>linki do projektów, GitHuba i LinkedIna prowadzą do serwisów, które mają własne regulaminy i polityki prywatności.</p>
+
+  <h2>dane osobowe</h2>
+  <p>zasady przetwarzania danych opisuje <a href={legalPages.privacy.href}>{legalPages.privacy.label}</a>.</p>
+
+  <h2>kontakt</h2>
+  <p>pytania i uwagi: <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>
+</LegalPage>
