@@ -1,0 +1,191 @@
+---
+type Orientation = 'responsive' | 'landscape' | 'portrait';
+
+type Props = {
+  slug: string;
+  label: string;
+  orientation?: Orientation;
+  priority?: boolean;
+  compact?: boolean;
+  class?: string;
+};
+
+const { slug, label, orientation = 'responsive', priority = false, compact = false, class: className } = Astro.props;
+
+const portraitQuery = '(max-width: 767px)';
+const videoBase = `/video/${slug}`;
+const landscapePoster = `${videoBase}.webp`;
+const portraitPoster = `${videoBase}-pion.webp`;
+
+const sources =
+  orientation === 'responsive'
+    ? [
+        { src: `${videoBase}-pion.webm`, type: 'video/webm', media: portraitQuery },
+        { src: `${videoBase}-pion.mp4`, type: 'video/mp4', media: portraitQuery },
+        { src: `${videoBase}-poziom.webm`, type: 'video/webm' },
+        { src: `${videoBase}-poziom.mp4`, type: 'video/mp4' },
+      ]
+    : [
+        { src: `${videoBase}-${orientation === 'portrait' ? 'pion' : 'poziom'}.webm`, type: 'video/webm' },
+        { src: `${videoBase}-${orientation === 'portrait' ? 'pion' : 'poziom'}.mp4`, type: 'video/mp4' },
+      ];
+
+const fallbackPoster = orientation === 'portrait' ? portraitPoster : landscapePoster;
+const loading = priority ? 'eager' : 'lazy';
+const fetchpriority = priority ? 'high' : 'auto';
+---
+
+<figure class:list={['project-video', `project-video--${orientation}`, { 'project-video--compact': compact }, className]} data-project-video aria-label={label}>
+  <picture class="project-video__poster">
+    {orientation === 'responsive' && <source srcset={portraitPoster} media={portraitQuery} type="image/webp" />}
+    <img src={fallbackPoster} alt="" loading={loading} fetchpriority={fetchpriority} decoding="async" />
+  </picture>
+  <video class="project-video__media" muted playsinline loop preload="none" aria-hidden="true" disablepictureinpicture>
+    {sources.map((source) => <source src={source.src} type={source.type} media={source.media} />)}
+  </video>
+  <button class="project-video__toggle" type="button" data-video-toggle data-paused="false" hidden>
+    <svg class="project-video__icon project-video__icon--pause" viewBox="0 0 16 16" aria-hidden="true">
+      <rect x="4" y="3" width="3" height="10" rx="1" />
+      <rect x="9" y="3" width="3" height="10" rx="1" />
+    </svg>
+    <svg class="project-video__icon project-video__icon--play" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M5 3.5v9a.5.5 0 0 0 .77.42l7-4.5a.5.5 0 0 0 0-.84l-7-4.5A.5.5 0 0 0 5 3.5Z" />
+    </svg>
+    <span class="visually-hidden" data-video-toggle-label>zatrzymaj nagranie</span>
+  </button>
+</figure>
+
+<style>
+  .project-video {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-ink);
+  }
+
+  .project-video__poster,
+  .project-video__poster img,
+  .project-video__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-video__media {
+    opacity: 0;
+    transition: opacity var(--duration-medium) var(--ease-calm);
+  }
+
+  .project-video.has-frame .project-video__media {
+    opacity: 1;
+  }
+
+  .project-video__toggle {
+    position: absolute;
+    right: var(--space-1);
+    bottom: var(--space-1);
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--color-ink) 72%, transparent);
+    color: var(--color-paper);
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .project-video--compact .project-video__toggle {
+    right: 4px;
+    bottom: 4px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .project-video--compact .project-video__toggle::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+  }
+
+  .project-video--compact .project-video__icon {
+    width: 12px;
+    height: 12px;
+  }
+
+  .project-video__icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  .project-video__icon--play,
+  .project-video__toggle[data-paused='true'] .project-video__icon--pause {
+    display: none;
+  }
+
+  .project-video__toggle[data-paused='true'] .project-video__icon--play {
+    display: block;
+  }
+</style>
+
+<script>
+  const visibleShare = 0.5;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+  const autoplayAllowed = () => !reducedMotion.matches && !saveData;
+
+  const setToggleState = (figure: HTMLElement, pausedByViewer: boolean) => {
+    const toggle = figure.querySelector<HTMLButtonElement>('[data-video-toggle]');
+    const label = figure.querySelector<HTMLElement>('[data-video-toggle-label]');
+    if (!toggle || !label) return;
+    toggle.dataset.paused = String(pausedByViewer);
+    label.textContent = pausedByViewer ? 'odtwórz nagranie' : 'zatrzymaj nagranie';
+  };
+
+  const playVideo = (video: HTMLVideoElement) => {
+    video.play().catch(() => video.pause());
+  };
+
+  const visibilityObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        const figure = entry.target as HTMLElement;
+        const video = figure.querySelector('video');
+        if (!video) continue;
+        const pausedByViewer = figure.classList.contains('is-paused-by-viewer');
+        if (entry.isIntersecting && autoplayAllowed() && !pausedByViewer) playVideo(video);
+        else video.pause();
+      }
+    },
+    { threshold: visibleShare },
+  );
+
+  const startObserving = () => {
+    for (const figure of document.querySelectorAll<HTMLElement>('[data-project-video]')) {
+      const video = figure.querySelector('video');
+      const toggle = figure.querySelector<HTMLButtonElement>('[data-video-toggle]');
+      if (!video || !toggle) continue;
+      if (!autoplayAllowed()) {
+        figure.classList.add('is-paused-by-viewer');
+        setToggleState(figure, true);
+      }
+      video.addEventListener('playing', () => figure.classList.add('has-frame'), { once: true });
+      toggle.hidden = false;
+      toggle.addEventListener('click', () => {
+        const pauseNow = !figure.classList.contains('is-paused-by-viewer') && !video.paused;
+        figure.classList.toggle('is-paused-by-viewer', pauseNow);
+        setToggleState(figure, pauseNow);
+        if (pauseNow) video.pause();
+        else playVideo(video);
+      });
+      visibilityObserver.observe(figure);
+    }
+  };
+
+  if (document.readyState === 'complete') startObserving();
+  else window.addEventListener('load', startObserving, { once: true });
+</script>

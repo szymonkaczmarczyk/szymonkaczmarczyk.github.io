@@ -1,31 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { aboutPlayableProject, chapterProjects, moreProjects } from '../data/projekty';
-import { owner } from '../data/strona';
+import StartSection from '../components/StartSection.astro';
+import CinemaChapters from '../components/CinemaChapters.astro';
+import { moreProjects } from '../data/projekty';
+import { aboutCopy, contactCopy, owner } from '../data/strona';
 ---
 
 <BaseLayout>
-  <section id="start" class="shell page-section start" aria-labelledby="start-title">
-    <h1 id="start-title">{owner.name}</h1>
-    <p class="lead">strony i aplikacje pokazane na nagraniach</p>
-    <p class="signature">{owner.firstName}</p>
-    <a class="button" href="#prace">zobacz prace <span class="button__arrow" aria-hidden="true">→</span></a>
-  </section>
+  <StartSection />
 
-  <section id="prace" class="shell page-section" aria-labelledby="prace-title">
-    <h2 id="prace-title">prace</h2>
-    <ol class="project-rows">
-      {
-        chapterProjects.map((project, index) => (
-          <li class="project-row">
-            <p class="hand project-row__note">rozdział {index + 1} z {chapterProjects.length}</p>
-            <h3>{project.name}</h3>
-            <p>{project.summary}</p>
-          </li>
-        ))
-      }
-    </ol>
-  </section>
+  <CinemaChapters />
 
   <section id="wiecej" class="shell page-section" aria-labelledby="wiecej-title">
     <h2 id="wiecej-title">więcej prac</h2>
@@ -34,7 +18,7 @@ import { owner } from '../data/strona';
         moreProjects.map((project) => (
           <li class="project-row">
             <h4>{project.name}</h4>
-            <p class="small">{project.kind}</p>
+            <p class="small">{project.tagline}</p>
           </li>
         ))
       }
@@ -42,13 +26,19 @@ import { owner } from '../data/strona';
   </section>
 
   <section id="o-mnie" class="shell page-section" aria-labelledby="o-mnie-title">
-    <h2 id="o-mnie-title">o mnie</h2>
-    <p class="lead">tu pojawi się zdjęcie, nagranie {aboutPlayableProject.name} i kilka zdań.</p>
+    <h2 id="o-mnie-title">{aboutCopy.heading}</h2>
+    <p class="lead">{aboutCopy.text}</p>
+    <p class="small">{aboutCopy.videoCaption}</p>
   </section>
 
   <section id="kontakt" class="shell page-section" aria-labelledby="kontakt-title">
-    <h2 id="kontakt-title">kontakt</h2>
-    <a class="button button--quiet" href={`mailto:${owner.email}`}>napisz na {owner.email}</a>
+    <h2 id="kontakt-title">{contactCopy.heading}</h2>
+    <p class="lead">{contactCopy.text}</p>
+    <a class="button" href={`mailto:${owner.email}`}>{contactCopy.actionLabel} <span class="button__arrow" aria-hidden="true">→</span></a>
+    <ul class="contact-links">
+      <li><a class="button button--quiet" href={owner.github} rel="noopener noreferrer">GitHub</a></li>
+      <li><a class="button button--quiet" href={owner.linkedin} rel="noopener noreferrer">LinkedIn</a></li>
+    </ul>
   </section>
 </BaseLayout>
 
@@ -57,11 +47,6 @@ import { owner } from '../data/strona';
     display: grid;
     gap: var(--space-3);
     padding-block: var(--section-gap) 0;
-  }
-
-  .start {
-    justify-items: start;
-    padding-block-start: var(--space-8);
   }
 
   .project-rows {
@@ -77,7 +62,15 @@ import { owner } from '../data/strona';
     border-top: var(--border-thin) solid var(--color-line);
   }
 
-  .project-row__note {
-    color: var(--color-accent);
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .page-section > .button {
+    justify-self: start;
   }
 </style>

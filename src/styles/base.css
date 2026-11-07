@@ -175,6 +175,18 @@ a {
   color: var(--color-paper);
 }
 
+.button--paper {
+  border-color: var(--color-paper);
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.button--paper:hover {
+  border-color: var(--color-sun);
+  background: var(--color-sun);
+  color: var(--color-ink);
+}
+
 .button__arrow {
   transition: transform var(--duration-short) var(--ease-calm);
 }
@@ -221,6 +233,11 @@ a {
   .button--quiet:hover {
     background: transparent;
     color: var(--color-ink);
+  }
+
+  .button--paper:hover {
+    border-color: var(--color-paper);
+    background: var(--color-paper);
   }
 
   .button:hover .button__arrow {

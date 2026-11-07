@@ -1,0 +1,276 @@
+---
+import ProjectVideo from './ProjectVideo.astro';
+import ProjectPoster from './ProjectPoster.astro';
+import { chapterProjects } from '../data/projekty';
+
+const chapterTones = ['ink', 'accent'] as const;
+const wavePath = 'M0 96V52C120 30 220 70 360 48S600 18 760 44S1040 78 1200 46S1380 30 1440 40V96Z';
+
+const chapters = chapterProjects.map((project, index) => ({
+  project,
+  number: index + 1,
+  anchor: `rozdzial-${project.slug}`,
+  tone: chapterTones[index % chapterTones.length],
+}));
+const chapterCount = chapters.length;
+---
+
+<section id="prace" class="cinema" data-cinema data-tone={chapters[0].tone} aria-labelledby="prace-title">
+  <svg class="cinema__wave" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={wavePath} />
+  </svg>
+
+  <div class="cinema__body">
+    <h2 id="prace-title" class="visually-hidden">prace</h2>
+
+    <nav class="cinema__progress" aria-label="rozdziały">
+      <ol class="shell cinema__progress-list">
+        {
+          chapters.map((chapter) => (
+            <li>
+              <a class="cinema__progress-link" href={`#${chapter.anchor}`} data-chapter-link>
+                <span class="cinema__progress-track" aria-hidden="true">
+                  <span class="cinema__progress-fill" />
+                </span>
+                <span class="visually-hidden">
+                  rozdział {chapter.number}: {chapter.project.name}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </nav>
+
+    {
+      chapters.map((chapter) => (
+        <article id={chapter.anchor} class="chapter" data-chapter data-tone={chapter.tone} aria-labelledby={`${chapter.anchor}-nazwa`}>
+          <div class="chapter__media">
+            {chapter.project.media === 'video' ? (
+              <ProjectVideo class="chapter__frame" slug={chapter.project.slug} label={`nagranie projektu ${chapter.project.name}`} />
+            ) : (
+              <ProjectPoster class="chapter__frame" slug={chapter.project.slug} alt={`zrzut ekranu strony ${chapter.project.name}, ${chapter.project.kind}`} />
+            )}
+          </div>
+          <div class="chapter__caption">
+            <p class="hand chapter__note">
+              rozdział {chapter.number} z {chapterCount}
+            </p>
+            <h3 id={`${chapter.anchor}-nazwa`} class="chapter__name">
+              {chapter.project.name}
+            </h3>
+            <p class="chapter__tagline">{chapter.project.tagline}</p>
+            <a class="button button--paper" href={`/prace/${chapter.project.slug}/`}>
+              zobacz projekt<span class="visually-hidden"> {chapter.project.name}</span>
+              <span class="button__arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+
+  <svg class="cinema__wave cinema__wave--closing" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <path d={wavePath} />
+  </svg>
+</section>
+
+<style>
+  .cinema {
+    --cinema-tone: var(--color-ink);
+    --tone-transition: var(--duration-long) var(--ease-calm);
+    --focus-ring: 3px solid var(--color-sun);
+    color: var(--color-paper);
+  }
+
+  .cinema[data-tone='accent'] {
+    --cinema-tone: var(--color-accent);
+  }
+
+  .cinema__wave {
+    display: block;
+    width: 100%;
+    height: clamp(32px, 6vw, 88px);
+    margin-bottom: -1px;
+    fill: var(--cinema-tone);
+    transition: fill var(--tone-transition);
+  }
+
+  .cinema__wave--closing {
+    margin-top: -1px;
+    margin-bottom: 0;
+    transform: scaleY(-1);
+  }
+
+  .cinema__body {
+    padding-bottom: var(--space-8);
+    background: var(--cinema-tone);
+    transition: background-color var(--tone-transition);
+  }
+
+  .cinema__progress {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--cinema-tone);
+    transition: background-color var(--tone-transition);
+  }
+
+  .cinema__progress-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: var(--space-1);
+    padding-block: 0;
+    list-style: none;
+  }
+
+  .cinema__progress-link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .cinema__progress-track {
+    position: relative;
+    width: 100%;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--color-paper) 28%, transparent);
+  }
+
+  .cinema__progress-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--color-sun);
+    transform: scaleX(var(--chapter-progress, 0));
+    transform-origin: left center;
+  }
+
+  .chapter {
+    position: relative;
+    display: grid;
+    scroll-margin-top: 44px;
+  }
+
+  .chapter + .chapter {
+    margin-top: var(--space-8);
+  }
+
+  .chapter__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    max-height: 68svh;
+    background: var(--color-ink);
+  }
+
+  .chapter__media :global(.chapter__frame) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .chapter__caption {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--gutter) 0;
+  }
+
+  .chapter__note {
+    color: var(--color-sun);
+    font-size: var(--text-hand-large);
+  }
+
+  .chapter__name {
+    font-size: var(--text-h2);
+  }
+
+  .chapter__tagline {
+    font-size: var(--text-body-large);
+    letter-spacing: var(--tracking-body);
+  }
+
+  .chapter__caption .button {
+    margin-top: var(--space-1);
+  }
+
+  @media (min-width: 768px) {
+    .chapter__media {
+      aspect-ratio: 16 / 10;
+      max-height: calc(100svh - 44px);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .chapter__caption {
+      position: absolute;
+      left: var(--gutter);
+      bottom: var(--space-4);
+      max-width: 560px;
+      padding: var(--space-4);
+      border-radius: var(--radius);
+      background: var(--cinema-tone);
+      transition: background-color var(--tone-transition);
+    }
+  }
+</style>
+
+<script>
+  const cinema = document.querySelector<HTMLElement>('[data-cinema]');
+  const chapters = [...document.querySelectorAll<HTMLElement>('[data-chapter]')];
+  const progressLinks = [...document.querySelectorAll<HTMLElement>('[data-chapter-link]')];
+
+  if (cinema && chapters.length === progressLinks.length) {
+    let frameRequested = false;
+    let activeIndex = -1;
+
+    const chapterProgress = (chapter: HTMLElement) => {
+      const bounds = chapter.getBoundingClientRect();
+      const viewportMiddle = window.innerHeight / 2;
+      return Math.min(1, Math.max(0, (viewportMiddle - bounds.top) / bounds.height));
+    };
+
+    const markActiveChapter = (index: number) => {
+      if (index === activeIndex) return;
+      activeIndex = index;
+      cinema.dataset.tone = chapters[index].dataset.tone;
+      progressLinks.forEach((link, linkIndex) => {
+        if (linkIndex === index) link.setAttribute('aria-current', 'step');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    const updateProgress = () => {
+      frameRequested = false;
+      let reachedIndex = 0;
+      chapters.forEach((chapter, index) => {
+        const progress = chapterProgress(chapter);
+        progressLinks[index].style.setProperty('--chapter-progress', progress.toFixed(3));
+        if (progress > 0) reachedIndex = index;
+      });
+      markActiveChapter(reachedIndex);
+    };
+
+    const requestUpdate = () => {
+      if (frameRequested) return;
+      frameRequested = true;
+      requestAnimationFrame(updateProgress);
+    };
+
+    const cinemaVisibility = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        window.addEventListener('scroll', requestUpdate, { passive: true });
+        window.addEventListener('resize', requestUpdate, { passive: true });
+        requestUpdate();
+      } else {
+        window.removeEventListener('scroll', requestUpdate);
+        window.removeEventListener('resize', requestUpdate);
+      }
+    });
+
+    cinemaVisibility.observe(cinema);
+  }
+</script>

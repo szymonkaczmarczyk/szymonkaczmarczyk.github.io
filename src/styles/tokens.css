@@ -1,7 +1,7 @@
 :root {
   --color-paper: #f4eee3;
   --color-ink: #2b2620;
-  --color-ink-muted: #7b6f5d;
+  --color-ink-muted: #6b604f;
   --color-accent: #2f6b4f;
   --color-sun: #f2b66b;
   --color-desk: #c99f72;
@@ -24,6 +24,7 @@
   --text-body: 16px;
   --text-small: 14px;
   --text-hand: 24px;
+  --text-hand-large: 28px;
   --text-signature: 56px;
 
   --leading-heading: 1.1;

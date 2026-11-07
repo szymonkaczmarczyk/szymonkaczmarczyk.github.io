@@ -1,6 +1,8 @@
 # Nagrania do wykonania
 
-Każdy projekt potrzebuje dwóch nagrań: **poziom** (komputer) i **pion** (telefon). Do czasu nowych nagrań w `public/video/` są zamienniki - pierwsze 10 sekund starych nagrań, wersja pionowa wycięta ze środka poziomej.
+Każdy projekt potrzebuje dwóch nagrań: **poziom** (komputer) i **pion** (telefon). Do czasu nowych nagrań w `public/video/` są zamienniki - 10 sekund starych nagrań od klatki wybranej wcześniej na plakat, wersja pionowa wycięta ze środka poziomej. W starych nagraniach widać kursor.
+
+Znane wady zamienników: plakat Tankomapy ma jeszcze okienko „Ładuję mapę”, plakat Enklawy jest ciemny (filmowe intro), odloti i Operandi mają tylko statyczny zrzut.
 
 ## Wymagania techniczne
 

@@ -1,0 +1,98 @@
+---
+import DeskIllustration from './DeskIllustration.astro';
+import { owner, startCopy } from '../data/strona';
+---
+
+<section id="start" class="shell start" aria-labelledby="start-title">
+  <div class="start__copy">
+    <h1 id="start-title" class="start__title">
+      {startCopy.headingBefore}{' '}
+      <span class="start__highlight">
+        {startCopy.headingHighlight}
+        <svg class="start__underline" viewBox="0 0 200 14" aria-hidden="true" focusable="false">
+          <path d="M3 9C34 4 62 12 98 7S162 3 197 8" />
+        </svg>
+      </span>
+      {startCopy.headingAfter && ` ${startCopy.headingAfter}`}
+    </h1>
+    <p class="lead">{startCopy.description}</p>
+    <p class="signature">{owner.firstName}</p>
+    <a class="button" href="#prace">
+      {startCopy.actionLabel}
+      <span class="button__arrow" aria-hidden="true">→</span>
+    </a>
+  </div>
+  <DeskIllustration />
+</section>
+
+<style>
+  .start {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-4) var(--space-8);
+  }
+
+  .start__copy {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+
+  .start__title {
+    padding-bottom: 0.16em;
+  }
+
+  .start__highlight {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .start__underline {
+    position: absolute;
+    left: -0.04em;
+    right: -0.04em;
+    top: 100%;
+    width: calc(100% + 0.08em);
+    height: auto;
+    margin-top: -0.06em;
+    overflow: visible;
+  }
+
+  .start__underline path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 3.2;
+    stroke-linecap: round;
+    stroke-dasharray: 200;
+    animation: draw-underline var(--duration-long) var(--ease-calm) 400ms both;
+  }
+
+  @keyframes draw-underline {
+    from {
+      stroke-dashoffset: 200;
+    }
+
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .start :global(.desk) {
+    max-width: 720px;
+    justify-self: end;
+  }
+
+  @media (min-width: 1200px) {
+    .start :global(.desk) {
+      max-width: none;
+    }
+
+    .start {
+      grid-template-columns: 7fr 5fr;
+      align-items: center;
+      gap: var(--space-8);
+      padding-block: var(--space-8) var(--space-12);
+    }
+  }
+</style>

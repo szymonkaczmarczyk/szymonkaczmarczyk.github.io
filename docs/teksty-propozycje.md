@@ -1,5 +1,19 @@
 # Teksty - propozycje do akceptacji
 
+## Zaakceptowane 2026-11-07
+
+Wybór właściciela jest już na stronie (`src/data/strona.ts` i pole `tagline` w `src/data/projekty.ts`).
+
+- nagłówek startu: B, podkreślenie pod „zostać dłużej”
+- opis pod nagłówkiem: B
+- przycisk startowy: C
+- projekty: Enklawa Villas A, Projekt 195 C, Tankomapa C bez „lubię” na początku, odloti B, Operandi A, Kilwater A, CeraLab B, PanRouter A, Cyberstart B, Race Predictor B, Match Predictor C, Claus A, Esencja A
+- o mnie: A
+- kontakt: B z nagłówkiem „masz coś, co powinno działać lepiej? napisz do mnie” i przyciskiem „napisz wiadomość”
+- tytuł i opis meta: C
+
+Poniżej pełna lista wariantów do wglądu.
+
 Każde miejsce ma trzy warianty: **A spokojny**, **B odważny**, **C osobisty**. Teksty opisują Szymona tak, jak będzie widziany za dwa lata. To wizja i kierunek, nie lista faktów.
 
 Zasady, które sprawdziłem w każdym zdaniu:
@@ -103,7 +117,7 @@ Pod tekstem jest nagranie Cyberstartu. Przycisk „zagraj” pojawi się dopiero
 
 - **A spokojny**
   - nagłówek: uczę się, budując
-  - tekst: projektuję i programuję strony, a potem sprawdzam, jak sprawdzają się w codziennym użyciu. za każdym projektem stoi ta sama zasada - mniej rzeczy, ale dopracowanych.
+  - tekst: projektuję i programuję strony, a potem sprawdzam, jak radzą sobie w codziennym użyciu. za każdym projektem stoi ta sama zasada - mniej rzeczy, ale dopracowanych.
   - podpis pod nagraniem: Cyberstart - minigry o bezpieczeństwie w sieci
 - **B odważny**
   - nagłówek: robię mniej, ale do końca
