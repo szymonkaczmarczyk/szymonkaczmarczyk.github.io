@@ -13,3 +13,14 @@ zasady-projektu.md
 .claude/
 .cursor/
 .codex/
+*.log
+npm-debug.log*
+.vscode/
+.idea/
+test-results/
+playwright-report/
+.playwright-mcp/
+GEMINI.md
+.gemini/
+.windsurf/
+.aider*
