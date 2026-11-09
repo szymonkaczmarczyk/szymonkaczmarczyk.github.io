@@ -1,13 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { homePaths } from '../data/jezyki';
 ---
 
-<BaseLayout title="Nie ma takiej strony - Szymon Kaczmarczyk" description="Ta strona nie istnieje albo zmieniła adres" indexable={false}>
+<BaseLayout locale="pl" title="Nie ma takiej strony - Szymon Kaczmarczyk" description="Ta strona nie istnieje albo zmieniła adres" indexable={false}>
   <section class="shell not-found" aria-labelledby="not-found-title">
     <p class="hand not-found__note">tu nic nie ma</p>
     <h1 id="not-found-title">Nie ma takiej strony</h1>
     <p class="lead">Adres mógł się zmienić. Wszystkie prace są na stronie głównej.</p>
-    <a class="button" href="/">Wróć na stronę główną <span class="button__arrow" aria-hidden="true">→</span></a>
+    <a class="button" href={homePaths.pl}>Wróć na stronę główną <span class="button__arrow" aria-hidden="true">→</span></a>
+    <p class="small not-found__english" lang="en">
+      Page not found. <a href={homePaths.en}>Go to the English homepage</a>
+    </p>
   </section>
 </BaseLayout>
 
@@ -21,5 +25,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .not-found__note {
     color: var(--color-accent);
+  }
+
+  .not-found__english {
+    margin-block-start: var(--space-4);
+    color: var(--color-ink-muted);
   }
 </style>

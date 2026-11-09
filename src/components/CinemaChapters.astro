@@ -1,6 +1,17 @@
 ---
 import ProjectVideo from './ProjectVideo.astro';
-import { chapterProjects, homeAnchorFor, projectHref, titleTransitionNameFor, transitionNameFor } from '../data/projekty';
+import { chapterProjects, homeAnchorFor, localizeProject, projectHref, titleTransitionNameFor, transitionNameFor } from '../data/projekty';
+import { siteCopy } from '../data/strona';
+import { sectionIds, type Locale } from '../data/jezyki';
+
+type Props = {
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+const workCopy = siteCopy[locale].work;
+const ids = sectionIds[locale];
+const titleId = `${ids.work}-title`;
 
 const chapterTones = ['ink', 'accent'] as const;
 const dividerPath = 'M0 22C140 8 260 34 420 20S700 6 860 22S1160 36 1300 18S1400 14 1440 20';
@@ -9,20 +20,20 @@ const waveSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 96' p
 const waveMaskStyle = `--wave-mask: url("data:image/svg+xml,${encodeURIComponent(waveSvg)}")`;
 
 const chapters = chapterProjects.map((project, index) => ({
-  project,
+  project: localizeProject(project, locale),
   number: index + 1,
-  anchor: homeAnchorFor(project.slug),
+  anchor: homeAnchorFor(project.slug, locale),
   tone: chapterTones[index % chapterTones.length],
 }));
 ---
 
-<section id="prace" class="cinema" data-cinema data-tone={chapters[0].tone} aria-labelledby="prace-title">
+<section id={ids.work} class="cinema" data-cinema data-tone={chapters[0].tone} aria-labelledby={titleId}>
   <div class="cinema__wave grain" style={waveMaskStyle} aria-hidden="true"></div>
 
   <div class="cinema__body grain">
-    <h2 id="prace-title" class="visually-hidden">Prace</h2>
+    <h2 id={titleId} class="visually-hidden">{workCopy.heading}</h2>
 
-    <nav class="cinema__progress" aria-label="rozdziały">
+    <nav class="cinema__progress" aria-label={workCopy.chaptersNavigation}>
       <ol class="shell cinema__progress-list">
         {
           chapters.map((chapter) => (
@@ -31,9 +42,7 @@ const chapters = chapterProjects.map((project, index) => ({
                 <span class="cinema__progress-track" aria-hidden="true">
                   <span class="cinema__progress-fill" />
                 </span>
-                <span class="visually-hidden">
-                  rozdział {chapter.number}: {chapter.project.name}
-                </span>
+                <span class="visually-hidden">{workCopy.chapterLabel(chapter.number, chapter.project.name)}</span>
               </a>
             </li>
           ))
@@ -57,14 +66,14 @@ const chapters = chapterProjects.map((project, index) => ({
               {chapter.project.name}
             </h3>
             <p class="chapter__tagline">{chapter.project.tagline}</p>
-            <a class="button button--paper" href={projectHref(chapter.project.slug)}>
-              Zobacz projekt<span class="visually-hidden"> {chapter.project.name}</span>
+            <a class="button button--paper" href={projectHref(chapter.project.slug, locale)}>
+              {workCopy.viewProject}<span class="visually-hidden"> {chapter.project.name}</span>
               <span class="button__arrow" aria-hidden="true">→</span>
             </a>
           </div>
           <figure class="chapter__figure">
             <div class="chapter__media reveal-frame" style={`view-transition-name: ${transitionNameFor(chapter.project.slug)}`}>
-              <ProjectVideo class="chapter__frame" slug={chapter.project.slug} label={`nagranie projektu ${chapter.project.name}`} />
+              <ProjectVideo class="chapter__frame" slug={chapter.project.slug} label={workCopy.recordingLabel(chapter.project.name)} />
             </div>
             <figcaption class="small chapter__stack">{chapter.project.stack.join(' · ')}</figcaption>
           </figure>

@@ -1,6 +1,17 @@
 ---
 import ProjectVideo from './ProjectVideo.astro';
-import { deskLaptopProject as laptopProject, deskPhoneProject as phoneProject } from '../data/projekty';
+import { deskLaptopProject, deskPhoneProject, localizeProject } from '../data/projekty';
+import { siteCopy } from '../data/strona';
+import type { Locale } from '../data/jezyki';
+
+type Props = {
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+const startCopy = siteCopy[locale].start;
+const laptopProject = localizeProject(deskLaptopProject, locale);
+const phoneProject = localizeProject(deskPhoneProject, locale);
 ---
 
 <div class="desk">
@@ -33,7 +44,7 @@ import { deskLaptopProject as laptopProject, deskPhoneProject as phoneProject } 
   <ProjectVideo
     class="desk__laptop-screen"
     slug={laptopProject.slug}
-    label={`nagranie strony ${laptopProject.name} na ekranie laptopa`}
+    label={startCopy.laptopLabel(laptopProject.name)}
     priority
   />
   <span class="desk__notch" aria-hidden="true"></span>
@@ -43,7 +54,7 @@ import { deskLaptopProject as laptopProject, deskPhoneProject as phoneProject } 
       class="desk__phone-video"
       slug={phoneProject.slug}
       orientation="pion"
-      label={`nagranie mobilnej wersji strony ${phoneProject.name}, ${phoneProject.kind}, na ekranie telefonu`}
+      label={startCopy.phoneLabel(phoneProject.name, phoneProject.kind)}
     />
     <span class="desk__island" aria-hidden="true"></span>
   </div>

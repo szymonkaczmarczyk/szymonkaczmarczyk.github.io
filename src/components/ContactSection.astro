@@ -1,5 +1,15 @@
 ---
-import { contactCopy, legalPages, owner } from '../data/strona';
+import { owner, siteCopy } from '../data/strona';
+import { sectionIds, type Locale } from '../data/jezyki';
+
+type Props = {
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+const { contact: contactCopy, legal } = siteCopy[locale];
+const ids = sectionIds[locale];
+const titleId = `${ids.contact}-title`;
 
 const profiles = [
   { href: owner.github, label: 'GitHub' },
@@ -7,9 +17,9 @@ const profiles = [
 ];
 ---
 
-<section id="kontakt" class="shell contact" aria-labelledby="kontakt-title">
-  <p class="hand contact__note">kontakt</p>
-  <h2 id="kontakt-title" class="contact__title">{contactCopy.heading}</h2>
+<section id={ids.contact} class="shell contact" aria-labelledby={titleId}>
+  <p class="hand contact__note">{contactCopy.note}</p>
+  <h2 id={titleId} class="contact__title">{contactCopy.heading}</h2>
   <a class="contact__email" href={`mailto:${owner.email}`}>{owner.email}</a>
 
   <div class="contact__row">
@@ -35,7 +45,7 @@ const profiles = [
   </div>
 
   <p class="small contact__privacy">
-    {contactCopy.privacyNote} {contactCopy.privacyLinkLead} <a href={legalPages.privacy.href}>{contactCopy.privacyLinkLabel}</a>.
+    {contactCopy.privacyNote} {contactCopy.privacyLinkLead} <a href={legal.privacy.href}>{contactCopy.privacyLinkLabel}</a>.
   </p>
 </section>
 

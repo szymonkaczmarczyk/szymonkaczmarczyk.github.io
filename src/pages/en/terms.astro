@@ -1,0 +1,27 @@
+---
+import LegalPage from '../../components/LegalPage.astro';
+import { owner, siteCopy } from '../../data/strona';
+import { termsPaths } from '../../data/jezyki';
+
+const { privacy } = siteCopy.en.legal;
+---
+
+<LegalPage locale="en" alternates={termsPaths} heading="Terms of use" description="Terms of use of Szymon Kaczmarczyk’s portfolio - the nature of the website, copyright and contact">
+  <h2>Website owner</h2>
+  <p>The website is run privately by {owner.name}.</p>
+
+  <h2>Nature of the website</h2>
+  <p>The portfolio is informational and non-commercial. It does not sell services online and does not conclude distance contracts.</p>
+
+  <h2>Copyright</h2>
+  <p>The source code of the website is available under the MIT license. Recordings, posters, photos and texts belong to the website owner and are not covered by this license. Copying them beyond fair use requires permission.</p>
+
+  <h2>External websites</h2>
+  <p>Links to projects, GitHub and LinkedIn lead to services that have their own terms and privacy policies.</p>
+
+  <h2>Personal data</h2>
+  <p>Data processing is described in the <a href={privacy.href}>{privacy.label.toLowerCase()}</a>.</p>
+
+  <h2>Contact</h2>
+  <p>Questions and comments: <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>
+</LegalPage>

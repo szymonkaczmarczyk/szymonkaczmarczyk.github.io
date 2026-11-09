@@ -1,9 +1,12 @@
 ---
 import LegalPage from '../components/LegalPage.astro';
-import { legalPages, owner } from '../data/strona';
+import { owner, siteCopy } from '../data/strona';
+import { termsPaths } from '../data/jezyki';
+
+const { privacy } = siteCopy.pl.legal;
 ---
 
-<LegalPage heading="Regulamin" description="Zasady korzystania z portfolio Szymona Kaczmarczyka - charakter strony, prawa autorskie i kontakt">
+<LegalPage locale="pl" alternates={termsPaths} heading="Regulamin" description="Zasady korzystania z portfolio Szymona Kaczmarczyka - charakter strony, prawa autorskie i kontakt">
   <h2>Właściciel strony</h2>
   <p>Stronę prowadzi prywatnie {owner.name}.</p>
 
@@ -17,7 +20,7 @@ import { legalPages, owner } from '../data/strona';
   <p>Linki do projektów, GitHuba i LinkedIna prowadzą do serwisów, które mają własne regulaminy i polityki prywatności.</p>
 
   <h2>Dane osobowe</h2>
-  <p>Zasady przetwarzania danych opisuje <a href={legalPages.privacy.href}>{legalPages.privacy.label}</a>.</p>
+  <p>Zasady przetwarzania danych opisuje <a href={privacy.href}>{privacy.label}</a>.</p>
 
   <h2>Kontakt</h2>
   <p>Pytania i uwagi: <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>

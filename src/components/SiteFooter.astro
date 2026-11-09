@@ -1,6 +1,14 @@
 ---
-import { footerCopy, legalPages, navigation, owner } from '../data/strona';
+import { owner, siteCopy } from '../data/strona';
+import { homePaths, localeMeta, locales, type Locale, type LocalizedPath } from '../data/jezyki';
 
+type Props = {
+  locale: Locale;
+  alternates?: LocalizedPath;
+};
+
+const { locale, alternates = homePaths } = Astro.props;
+const { footer: footerCopy, legal, navigation } = siteCopy[locale];
 const currentYear = new Date().getFullYear();
 const columns = [
   { heading: footerCopy.siteHeading, links: navigation },
@@ -12,7 +20,16 @@ const columns = [
       { href: owner.linkedin, label: 'LinkedIn', external: true },
     ],
   },
-  { heading: footerCopy.legalHeading, links: [legalPages.privacy, legalPages.terms] },
+  { heading: footerCopy.legalHeading, links: [legal.privacy, legal.terms] },
+  {
+    heading: footerCopy.languageHeading,
+    links: locales.map((linkLocale) => ({
+      href: alternates[linkLocale],
+      label: localeMeta[linkLocale].nativeName,
+      language: localeMeta[linkLocale].htmlLang,
+      current: linkLocale === locale,
+    })),
+  },
 ];
 ---
 
@@ -29,7 +46,14 @@ const columns = [
           <ul class="site-footer__links">
             {column.links.map((link) => (
               <li>
-                <a class="link-draw" href={link.href} rel={'external' in link && link.external ? 'noopener noreferrer' : undefined}>
+                <a
+                  class="link-draw"
+                  href={link.href}
+                  rel={'external' in link && link.external ? 'noopener noreferrer' : undefined}
+                  hreflang={'language' in link ? link.language : undefined}
+                  lang={'language' in link ? link.language : undefined}
+                  aria-current={'current' in link && link.current ? 'page' : undefined}
+                >
                   {link.label}
                 </a>
               </li>
@@ -102,6 +126,10 @@ const columns = [
     min-height: var(--touch-target);
   }
 
+  .site-footer__links a[aria-current='page'] {
+    color: var(--color-sun);
+  }
+
   .site-footer__year {
     grid-column: 1 / -1;
   }
@@ -150,7 +178,7 @@ const columns = [
 
   @media (min-width: 1024px) {
     .site-footer__inner {
-      grid-template-columns: 2fr 1fr 1fr 1fr auto;
+      grid-template-columns: 2fr repeat(4, 1fr) auto;
       padding-top: var(--space-10);
     }
 

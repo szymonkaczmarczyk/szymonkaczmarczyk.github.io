@@ -1,0 +1,32 @@
+---
+import LegalPage from '../../components/LegalPage.astro';
+import { owner } from '../../data/strona';
+import { privacyPaths } from '../../data/jezyki';
+---
+
+<LegalPage locale="en" alternates={privacyPaths} heading="Privacy policy" description="How this website handles data - no cookies, no analytics and no forms">
+  <p>This is a private portfolio. I do not run a business through it and I do not collect any data beyond what is described below.</p>
+
+  <h2>Data controller</h2>
+  <p>The controller is {owner.name}, contact: <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>
+
+  <h2>What this website does not do</h2>
+  <p>The website does not use cookies, analytics, advertising pixels, forms or external fonts. It does not store anything in your browser either. Recordings, photos and fonts load from the same server as the website.</p>
+
+  <h2>Hosting</h2>
+  <p>The website is served by GitHub Pages (GitHub, Inc., USA). The server may keep technical logs, including your IP address, to keep the website running and secure. GitHub takes part in the EU-US Data Privacy Framework and describes this in its privacy statement.</p>
+
+  <h2>External websites</h2>
+  <p>The "open website" buttons and the links to GitHub and LinkedIn lead to other services. They follow their own privacy policies and collect data only once you click them.</p>
+
+  <h2>Email contact</h2>
+  <p>If you send me an email, I process your address and the content of the message only to reply (Article 6(1)(f) GDPR). I keep them until our conversation ends and then for no longer than 12 months, unless you ask me to delete them sooner.</p>
+
+  <h2>Your rights</h2>
+  <ul>
+    <li>Access to your data, rectification, erasure or restriction of processing</li>
+    <li>Objection to processing and data portability</li>
+    <li>A complaint to the President of the Polish Personal Data Protection Office (UODO)</li>
+  </ul>
+  <p>To exercise these rights, write to <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>
+</LegalPage>

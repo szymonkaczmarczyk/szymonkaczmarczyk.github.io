@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StartSection from './StartSection.astro';
+import CinemaChapters from './CinemaChapters.astro';
+import MoreWorks from './MoreWorks.astro';
+import AboutSection from './AboutSection.astro';
+import ContactSection from './ContactSection.astro';
+import { homePaths, type Locale } from '../data/jezyki';
+
+type Props = {
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+---
+
+<BaseLayout locale={locale} alternates={homePaths} preloadSerif>
+  <StartSection locale={locale} />
+
+  <CinemaChapters locale={locale} />
+
+  <MoreWorks locale={locale} />
+
+  <AboutSection locale={locale} />
+
+  <ContactSection locale={locale} />
+</BaseLayout>

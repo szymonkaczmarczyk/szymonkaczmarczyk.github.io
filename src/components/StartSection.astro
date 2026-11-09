@@ -1,9 +1,18 @@
 ---
 import DeskIllustration from './DeskIllustration.astro';
-import { owner, startCopy } from '../data/strona';
+import { owner, siteCopy } from '../data/strona';
+import { sectionIds, type Locale } from '../data/jezyki';
+
+type Props = {
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+const startCopy = siteCopy[locale].start;
+const ids = sectionIds[locale];
 ---
 
-<section id="start" class="shell start" aria-labelledby="start-title">
+<section id={ids.start} class="shell start" aria-labelledby="start-title">
   <div class="start__copy">
     <h1 id="start-title" class="start__title">
       {startCopy.headingBefore}{' '}
@@ -13,18 +22,17 @@ import { owner, startCopy } from '../data/strona';
           <path d="M3 9C34 4 62 12 98 7S162 3 197 8" />
         </svg>
       </span>
-      {startCopy.headingAfter && ` ${startCopy.headingAfter}`}
     </h1>
     <p class="lead start__lead">{startCopy.description}</p>
     <div class="start__actions">
-      <a class="button" href="#prace">
+      <a class="button" href={`#${ids.work}`}>
         {startCopy.actionLabel}
         <span class="button__arrow" aria-hidden="true">→</span>
       </a>
       <p class="signature">{owner.name}</p>
     </div>
   </div>
-  <DeskIllustration />
+  <DeskIllustration locale={locale} />
 </section>
 
 <style>

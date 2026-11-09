@@ -1,25 +1,29 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { legalPages, owner } from '../data/strona';
+import { legalUpdatedOn, owner, siteCopy } from '../data/strona';
+import { homePaths, type Locale, type LocalizedPath } from '../data/jezyki';
 
 type Props = {
+  locale: Locale;
+  alternates: LocalizedPath;
   heading: string;
   description: string;
 };
 
-const { heading, description } = Astro.props;
+const { locale, alternates, heading, description } = Astro.props;
+const legal = siteCopy[locale].legal;
 ---
 
-<BaseLayout title={`${heading} - ${owner.name}`} description={description}>
+<BaseLayout locale={locale} alternates={alternates} title={`${heading} - ${owner.name}`} description={description}>
   <article class="shell legal" aria-labelledby="legal-title">
-    <a class="legal__back" href="/">
+    <a class="legal__back" href={homePaths[locale]}>
       <span class="legal__back-arrow" aria-hidden="true">←</span>
-      Strona główna
+      {legal.back}
     </a>
-    <p class="hand legal__note">informacje prawne</p>
+    <p class="hand legal__note">{legal.note}</p>
     <h1 id="legal-title" class="legal__title">{heading}</h1>
     <p class="small legal__updated">
-      Ostatnia zmiana: <time datetime={legalPages.updatedOn}>{legalPages.updatedLabel}</time>
+      {legal.updatedPrefix} <time datetime={legalUpdatedOn}>{legal.updatedLabel}</time>
     </p>
     <div class="legal__body">
       <slot />

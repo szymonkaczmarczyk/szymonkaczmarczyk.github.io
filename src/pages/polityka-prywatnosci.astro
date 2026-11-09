@@ -1,9 +1,10 @@
 ---
 import LegalPage from '../components/LegalPage.astro';
 import { owner } from '../data/strona';
+import { privacyPaths } from '../data/jezyki';
 ---
 
-<LegalPage heading="Polityka prywatności" description="Jak ta strona obchodzi się z danymi - bez cookies, bez analityki i bez formularzy">
+<LegalPage locale="pl" alternates={privacyPaths} heading="Polityka prywatności" description="Jak ta strona obchodzi się z danymi - bez cookies, bez analityki i bez formularzy">
   <p>To prywatne portfolio. Nie prowadzę przez nie działalności gospodarczej i nie zbieram danych poza tym, co opisuję niżej.</p>
 
   <h2>Administrator danych</h2>

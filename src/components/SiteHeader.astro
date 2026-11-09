@@ -1,14 +1,25 @@
 ---
-import { navigation, owner } from '../data/strona';
+import { owner, siteCopy } from '../data/strona';
+import { homePaths, localeMeta, otherLocale, type Locale, type LocalizedPath } from '../data/jezyki';
+
+type Props = {
+  locale: Locale;
+  alternates?: LocalizedPath;
+};
+
+const { locale, alternates = homePaths } = Astro.props;
+const copy = siteCopy[locale];
+const switchLocale = otherLocale(locale);
+const switchMeta = localeMeta[switchLocale];
 ---
 
 <header class="site-header">
   <div class="shell site-header__inner">
-    <a class="site-header__name" href="/">{owner.name}</a>
-    <nav aria-label="główna">
+    <a class="site-header__name" href={homePaths[locale]}>{owner.name}</a>
+    <nav class="site-header__nav" aria-label={copy.layout.mainNavigation}>
       <ul class="site-header__links">
         {
-          navigation.map((item) => (
+          copy.navigation.map((item) => (
             <li>
               <a class="link-draw" href={item.href}>{item.label}</a>
             </li>
@@ -16,6 +27,9 @@ import { navigation, owner } from '../data/strona';
         }
       </ul>
     </nav>
+    <a class="site-header__language" href={alternates[switchLocale]} hreflang={switchMeta.htmlLang} lang={switchMeta.htmlLang}>
+      {switchMeta.switchLabel}<span class="visually-hidden"> - {switchMeta.switchName}</span>
+    </a>
   </div>
 </header>
 
@@ -29,12 +43,12 @@ import { navigation, owner } from '../data/strona';
   .site-header__inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: var(--space-2);
     min-height: var(--header-height);
   }
 
   .site-header__name {
+    margin-inline-end: auto;
     font-weight: 500;
     text-decoration: none;
     white-space: nowrap;
@@ -55,6 +69,23 @@ import { navigation, owner } from '../data/strona';
     --link-inset: var(--space-1);
   }
 
+  .site-header__language {
+    display: inline-grid;
+    place-items: center;
+    min-width: var(--touch-target);
+    min-height: var(--touch-target);
+    border-left: 1px solid var(--color-line);
+    font-size: var(--text-small);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition: color var(--duration-short) var(--ease-calm);
+  }
+
+  .site-header__language:hover {
+    color: var(--color-accent);
+  }
+
   @media (max-width: 479px) {
     .site-header__name {
       font-size: var(--text-small);
@@ -66,6 +97,10 @@ import { navigation, owner } from '../data/strona';
 
     .site-header__links a {
       font-size: var(--text-small);
+    }
+
+    .site-header__language {
+      display: none;
     }
   }
 

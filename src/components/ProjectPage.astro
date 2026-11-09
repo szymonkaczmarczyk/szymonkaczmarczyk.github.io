@@ -1,0 +1,265 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectVideo from './ProjectVideo.astro';
+import { homeAnchorFor, localizeProject, nextProjectAfter, projectHref, titleTransitionNameFor, transitionNameFor, type Project } from '../data/projekty';
+import { owner, siteCopy } from '../data/strona';
+import { homePaths, projectPaths, type Locale } from '../data/jezyki';
+
+type Props = {
+  project: Project;
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+const project = localizeProject(Astro.props.project, locale);
+const nextProject = localizeProject(nextProjectAfter(project.slug), locale);
+const { project: projectCopy, work: workCopy } = siteCopy[locale];
+const backHref = `${homePaths[locale]}#${homeAnchorFor(project.slug, locale)}`;
+const pageTitle = `${project.name} - ${project.kind} - ${owner.name}`;
+const siteHost = project.url ? new URL(project.url).host : undefined;
+---
+
+<BaseLayout locale={locale} alternates={projectPaths(project.slug)} title={pageTitle} description={project.tagline}>
+  <article class="project" aria-labelledby="projekt-nazwa">
+    <div class="shell project__top">
+      <a class="project__back" href={backHref}>
+        <span class="project__back-arrow" aria-hidden="true">←</span>
+        {projectCopy.back}
+      </a>
+
+      <div class="project__head">
+        <header class="project__intro">
+          <h1 id="projekt-nazwa" class="project__name" style={`view-transition-name: ${titleTransitionNameFor(project.slug)}`}>{project.name}</h1>
+          <p class="lead project__tagline">{project.tagline}</p>
+        </header>
+
+        <div class="project__body">
+          <dl class="project__facts">
+            <div class="project__fact">
+              <dt>{projectCopy.inside}</dt>
+              <dd>{project.summary}</dd>
+            </div>
+            <div class="project__fact">
+              <dt>{projectCopy.role}</dt>
+              <dd>{project.role}</dd>
+            </div>
+            <div class="project__fact">
+              <dt>{projectCopy.stack}</dt>
+              <dd>
+                <ul class="project__stack">
+                  {project.stack.map((technology) => <li>{technology}</li>)}
+                </ul>
+              </dd>
+            </div>
+          </dl>
+
+          {
+            project.url && (
+              <p class="project__visit">
+                <a class="button" href={project.url} rel="noopener">
+                  {projectCopy.openSite}<span class="visually-hidden"> {project.name}</span>
+                  <span class="button__arrow button__arrow--external" aria-hidden="true">↗</span>
+                </a>
+                <span class="small project__host">{siteHost}</span>
+              </p>
+            )
+          }
+        </div>
+      </div>
+
+      <div class="project__media" style={`view-transition-name: ${transitionNameFor(project.slug)}`}>
+        <ProjectVideo class="project__frame" slug={project.slug} label={workCopy.recordingLabel(project.name)} priority />
+      </div>
+    </div>
+
+    <nav class="shell project__next" aria-label={projectCopy.nextNavigation}>
+      <a class="project__next-link" href={projectHref(nextProject.slug, locale)}>
+        <span class="hand project__next-note">{projectCopy.nextNote}</span>
+        <span class="project__next-name">
+          {nextProject.name}
+          <span class="button__arrow" aria-hidden="true">→</span>
+        </span>
+        <span class="small project__next-kind">{nextProject.kind}</span>
+      </a>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  .project {
+    display: grid;
+    gap: var(--space-10);
+  }
+
+  .project__top {
+    display: grid;
+    gap: var(--space-6);
+    padding-top: var(--space-2);
+  }
+
+  .project__back {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    gap: var(--space-2);
+    min-height: var(--touch-target);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .project__back-arrow {
+    display: grid;
+    place-items: center;
+    width: var(--pill-icon);
+    height: var(--pill-icon);
+    border-radius: var(--radius-pill);
+    box-shadow: inset 0 0 0 var(--border-thin) var(--color-line);
+    transition: transform var(--duration-short) var(--ease-calm), box-shadow var(--duration-short) var(--ease-calm);
+  }
+
+  .project__head {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .project__intro {
+    display: grid;
+    justify-items: start;
+    align-content: end;
+    gap: var(--space-2);
+  }
+
+  .project__tagline {
+    max-width: 44ch;
+    color: var(--color-ink-muted);
+  }
+
+  .project__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius-media);
+    background: var(--color-ink);
+  }
+
+  .project__media :global(.project__frame) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .project__body {
+    display: grid;
+    align-content: end;
+    gap: var(--space-4);
+  }
+
+  .project__facts {
+    display: grid;
+    margin: 0;
+  }
+
+  .project__fact {
+    display: grid;
+    gap: var(--space-half);
+    padding-block: var(--space-2);
+    border-top: var(--border-thin) solid var(--color-line);
+  }
+
+  .project__fact:last-child {
+    border-bottom: var(--border-thin) solid var(--color-line);
+  }
+
+  .project__fact dt {
+    color: var(--color-ink-muted);
+    font-size: var(--text-small);
+    letter-spacing: var(--tracking-body);
+  }
+
+  .project__fact dd {
+    margin: 0;
+    letter-spacing: var(--tracking-body);
+  }
+
+  .project__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    padding: 0;
+    list-style: none;
+  }
+
+  .project__stack li {
+    padding: var(--space-half) var(--space-2);
+    border-radius: var(--radius-pill);
+    box-shadow: inset 0 0 0 var(--border-thin) var(--color-line);
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  .project__visit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-3);
+  }
+
+  .project__host {
+    color: var(--color-ink-muted);
+  }
+
+  .project__next-link {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-1);
+    padding-top: var(--space-4);
+    border-top: var(--border-thin) solid var(--color-line);
+    text-decoration: none;
+  }
+
+  .project__next-note {
+    color: var(--color-accent);
+  }
+
+  .project__next-name {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: var(--text-h2);
+    font-weight: var(--weight-heading);
+    line-height: var(--leading-heading);
+    letter-spacing: var(--tracking-heading);
+  }
+
+  .project__next-kind {
+    color: var(--color-ink-muted);
+  }
+
+  @media (hover: hover) {
+    .project__back:hover .project__back-arrow {
+      transform: translateX(calc(var(--space-half) * -1));
+      box-shadow: inset 0 0 0 var(--border-thin) var(--color-ink);
+    }
+
+    .project__next-link:hover .button__arrow {
+      transform: translateX(var(--space-half));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .project__fact {
+      grid-template-columns: 128px minmax(0, 1fr);
+      gap: var(--space-3);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .project__head {
+      grid-template-columns: 7fr 5fr;
+      align-items: end;
+      gap: var(--space-10);
+    }
+  }
+</style>

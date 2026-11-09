@@ -1,95 +1,115 @@
 # Szymon Kaczmarczyk - portfolio
 
-> Strony i aplikacje, które się ruszają.
+> Strony i narzędzia, które sam projektuję i piszę, od pierwszego szkicu do działającej wersji.
 
-Na żywo: **[szymonkaczmarczyk.is-a.dev](https://szymonkaczmarczyk.is-a.dev)**
+Na żywo: **[szymonkaczmarczyk.is-a.dev](https://szymonkaczmarczyk.is-a.dev)** (wersja angielska pod
+[`/en/`](https://szymonkaczmarczyk.is-a.dev/en/)).
 
-Moje portfolio jako programisty. Zamiast statycznych zrzutów pokazuje nagrania prawdziwych projektów
-uruchomionych lokalnie: kilkanaście sekund z każdej strony, z przewijaniem, kliknięciami i animacjami.
-Obok nagrań są dwie strony, które już działają w sieci, krótko o mnie i kontakt.
+Moje portfolio. Zamiast statycznych zrzutów pokazuje nagrania 13 prawdziwych projektów: każda strona
+przewija się od góry do dołu w płynnym nagraniu, a każdy projekt ma własną podstronę z opisem, rolą
+i technologiami. Do tego krótko o mnie i kontakt, po polsku i po angielsku.
 
-Strona jest w pełni statyczna. Next.js 16 buduje ją do zwykłych plików HTML, CSS i JS, a GitHub Actions
-publikuje je na GitHub Pages. Nie ma serwera, bazy danych, formularzy, cookies ani analityki.
+Strona jest w pełni statyczna. Astro buduje ją do zwykłych plików HTML i CSS z odrobiną JS, a GitHub
+Actions publikuje je na GitHub Pages. Nie ma serwera, bazy danych, formularzy, cookies ani analityki.
 
-![Strona główna portfolio z ciekłym tłem w hero i showreelem](docs/screenshots/strona-glowna.jpg)
+![Strona główna portfolio z ilustracją biurka, na którym laptop i telefon odtwarzają nagrania projektów](docs/screenshots/strona-glowna.jpg)
 
 ## Dla kogo
 
 - **Dla osób, które chcą zobaczyć, jak pracuję**, zanim napiszą. Nagrania pokazują, jak strona zachowuje się
   w ruchu, a nie tylko jak wygląda na jednym kadrze.
-- **Dla programistów**, którzy szukają przykładu statycznego portfolio w Next.js z cięższym ruchem
-  (WebGL, GSAP, Lenis), które dalej trzyma wysokie wyniki Lighthouse.
+- **Dla rekruterów spoza Polski** - cała strona, z opisami projektów i dokumentami prawnymi, ma wersję angielską.
+- **Dla programistów**, którzy szukają przykładu lekkiego portfolio w Astro: wideo w 120 kl./s, przejścia
+  między stronami i animacje przy przewijaniu w samym CSS, a mimo to Lighthouse 100 na każdej stronie.
 
 Nie jest to sklep ani strona firmy. Portfolio nie sprzedaje usług przez internet i nie zbiera danych.
 
 ## Jak to działa
 
 ```
-src/ (Next.js, App Router) ──► next build ──► out/ (statyczne pliki)
-        │                                        │
-        │                                        └──► GitHub Actions ──► GitHub Pages
-        │
-        ├── data/prace.ts      lista nagranych prac i stron na żywo
-        ├── data/strona.ts     adres strony, imię, e-mail, GitHub
-        └── public/            nagrania, plakaty, zrzuty, zdjęcie, fonty
+src/data/  ──► Astro (komponenty .astro) ──► astro build ──► dist/ (statyczne pliki)
+  │                                                             │
+  │                                                             └──► GitHub Actions ──► GitHub Pages
+  ├── projekty.ts   13 projektów: nazwa, technologie, teksty PL i EN
+  ├── strona.ts     wszystkie teksty interfejsu PL i EN, dane właściciela
+  └── jezyki.ts     języki, adresy stron w obu wersjach, kotwice sekcji
+public/
+  video/            nagrania i plakaty projektów
+  o-mnie/           zdjęcie
+  fonts/            fonty woff2 z licencjami
 ```
 
-**Treści** są w dwóch plikach z danymi. Dodanie pracy to nowy wpis w `src/data/prace.ts` i pliki
-`<slug>.mp4`, `<slug>.webm`, `<slug>.jpg` oraz `<slug>-720.webp` / `<slug>-1440.webp` w `public/prace/`.
+**Treści** są w trzech plikach z danymi. Nowy projekt to wpis w `src/data/projekty.ts` (teksty w obu
+językach) i pliki w `public/video/`. Strony projektu w obu językach, linki, sitemap i tagi `hreflang`
+powstają z tych danych same.
 
-**Nagrania** powstają poza tym repo, w osobnych lokalnych narzędziach. Skrypt Playwright przewija każdą
-stronę w stałym tempie, a ffmpeg tnie i kompresuje wideo do mp4 i webm poniżej 3 MB. Do repo trafiają tylko
-gotowe pliki.
+**Języki.** Polski jest pod `/`, angielski pod `/en/`. Każda strona ma swój odpowiednik
+(`/prace/<projekt>/` i `/en/work/<projekt>/`, `/regulamin/` i `/en/terms/`), a przełącznik w nagłówku
+(na telefonie w stopce, w kolumnie „Język”) prowadzi dokładnie do tej samej strony w drugim języku.
 
-**Wideo na stronie** wczytuje się dopiero wtedy, gdy kadr jest widoczny i strona skończyła się ładować.
-Gra tylko w kadrze, pauzuje poza nim, a przy `prefers-reduced-motion` i trybie oszczędzania danych zostaje
-plakat.
+**Nagrania** powstają poza tym repo, w lokalnych narzędziach. Skrypt Playwright nagrywa każdą stronę
+klatka po klatce przy zatrzymanym zegarze, więc nie gubi ani nie dubluje klatek. ffmpeg robi z tego:
 
-**Ruch** obsługuje jedna biblioteka, GSAP z ScrollTrigger, a na urządzeniach z myszą także płynne przewijanie
-Lenis. Ciekłe tło w hero to własny shader WebGL (metaballe z gładką sumą SDF), ładowany dopiero po wejściu
-strony i zatrzymywany poza ekranem.
+| Plik | Dla kogo | Klatki | Szerokość |
+|---|---|---|---|
+| `<projekt>-poziom.webm` i `.mp4` | komputer i tablet | 120 kl./s | 1280 px |
+| `<projekt>-poziom-640.mp4` | telefon (do 767 px) | 60 kl./s | 640 px |
+| `<projekt>.webp`, `.jpg`, `<projekt>-640.webp` | plakat przed startem wideo | - | 1280 i 640 px |
+
+**Wideo na stronie** wczytuje się dopiero wtedy, gdy kadr jest na ekranie (`preload="none"`), gra tylko
+w kadrze, a przy `prefers-reduced-motion` i trybie oszczędzania danych zostaje plakat.
+
+**Ruch** jest w samym CSS: odsłanianie kadrów sterowane przewijaniem (`animation-timeline: view()`),
+przejścia między stronami (`@view-transition`) i rysowane linie fali. Strona nie ładuje żadnej biblioteki
+do animacji.
 
 ## Funkcje
 
 | Adres | Co to jest |
 |---|---|
-| `/` | Hero z ciekłym tłem, showreel rosnący do pełnej szerokości, prace, strony na żywo, o mnie, kontakt |
+| `/` | Start z ilustracją biurka, cztery rozdziały z nagraniami, więcej prac, o mnie, kontakt |
+| `/prace/<projekt>/` | Strona projektu: opis, co jest w środku, rola, technologie, nagranie, następny projekt |
 | `/polityka-prywatnosci/` | Polityka prywatności zgodna z RODO |
 | `/regulamin/` | Regulamin, w tym zakres licencji MIT |
-| każdy inny adres | Własna strona 404 w stylu reszty strony |
+| `/en/`, `/en/work/<projekt>/`, `/en/privacy/`, `/en/terms/` | Te same strony po angielsku |
+| każdy inny adres | Własna strona 404 z linkiem do obu wersji |
 
 Na stronie głównej:
 
-- **Prace z localhosta** - cztery wyróżnione nagrania w asymetrycznej siatce, które grają same w kadrze.
-- **Indeks kolejnych prac** - nazwy w wierszach, podgląd wideo przy kursorze i rozwijane nagranie po kliknięciu.
-- **Na żywo** - dwie opublikowane strony ze zrzutem i linkiem otwieranym w nowej karcie.
-- **O mnie** - zdjęcie, krótki opis, obszary pracy i narzędzia na co dzień.
-- **Kontakt** - e-mail i GitHub.
+- **Rozdziały** - cztery wyróżnione projekty na ciemnym tle, z paskiem postępu i falą między rozdziałami.
+- **Więcej prac** - kolejne projekty w rytmie szeroki, dwa wąskie.
+- **O mnie** - zdjęcie i tekst, który przy przewijaniu jedzie wzdłuż zdjęcia.
+- **Kontakt** - e-mail, GitHub i LinkedIn.
+- **Powrót w to samo miejsce** - po odświeżeniu strona wraca tam, gdzie była, także w Safari.
 
 ## Zrzuty ekranu
 
-| Prace z localhosta | Indeks z rozwiniętym nagraniem |
+| Rozdział z nagraniem | Więcej prac |
 |---|---|
-| ![Sekcja prac z numerowaną etykietą i wyróżnionymi nagraniami](docs/screenshots/prace.jpg) | ![Indeks prac z rozwiniętym nagraniem Kilwater](docs/screenshots/indeks.jpg) |
+| ![Rozdział Operandi na ciemnym tle z nagraniem strony i przyciskiem zobacz projekt](docs/screenshots/rozdzial.jpg) | ![Sekcja więcej prac z szerokim nagraniem Tankomapy](docs/screenshots/wiecej-prac.jpg) |
 
-| Strony na żywo | O mnie |
+| O mnie | Kontakt |
 |---|---|
-| ![Sekcja stron na żywo na jasnobłękitnym pasie](docs/screenshots/na-zywo.jpg) | ![Sekcja o mnie ze zdjęciem w kapsule i obszarami pracy](docs/screenshots/o-mnie.jpg) |
+| ![Sekcja o mnie ze zdjęciem i podpisem](docs/screenshots/o-mnie.jpg) | ![Sekcja kontaktu z adresem e-mail i przyciskami](docs/screenshots/kontakt.jpg) |
 
-| Kontakt | Strona 404 |
+| Strona projektu | Wersja angielska |
 |---|---|
-| ![Sekcja kontaktu z e-mailem i GitHubem](docs/screenshots/kontakt.jpg) | ![Strona błędu 404 z przyciskiem powrotu](docs/screenshots/404.jpg) |
+| ![Strona projektu Operandi z rolą, technologiami i nagraniem](docs/screenshots/projekt.jpg) | ![Strona główna po angielsku z przełącznikiem języka](docs/screenshots/english.jpg) |
 
-| Telefon |
+| Telefon | Strona projektu na telefonie |
+|---|---|
+| ![Start strony na telefonie z imieniem i nawigacją w jednym wierszu](docs/screenshots/telefon.jpg) | ![Strona projektu Kilwater po angielsku na telefonie](docs/screenshots/telefon-projekt.jpg) |
+
+| Strona 404 |
 |---|
-| ![Hero na telefonie z ciekłym tłem](docs/screenshots/telefon.jpg) |
+| ![Strona błędu 404 z przyciskiem powrotu i linkiem do wersji angielskiej](docs/screenshots/404.jpg) |
 
 Zrzuty pokazują stronę w obecnej wersji. Nie ma na niej danych osobowych poza moim imieniem, zdjęciem
 i adresem e-mail, które są publiczne z założenia.
 
 ## Uruchomienie
 
-Wymagany Node.js 20.9 lub nowszy (GitHub Actions używa Node 24).
+Wymagany Node.js 22.23 lub nowszy (GitHub Actions używa Node 24).
 
 ```bash
 npm install
@@ -99,10 +119,12 @@ npm run dev        # http://localhost:4800
 | Skrypt | Co robi |
 |---|---|
 | `npm run dev` | Serwer deweloperski na porcie 4800 |
-| `npm run build` | Statyczny build do `out/` |
-| `npm run preview` | Podgląd gotowego `out/` na http://127.0.0.1:4801, z obsługą zakresów dla wideo i stroną 404 |
-| `npm run typecheck` | Sprawdzenie typów TypeScript |
-| `npm run check:embed` | Sprawdza, czy strony z sekcji „na żywo” pozwalają się osadzić, i porównuje to z `src/data/prace.ts` |
+| `npm run build` | Statyczny build do `dist/`, potem twarde spacje po jednoliterowych słowach (`scripts/sierotki.mjs`) |
+| `npm run preview` | Podgląd gotowego `dist/` na http://127.0.0.1:4801, z obsługą zakresów dla wideo i stroną 404 |
+| `npm run check` | Sprawdzenie typów i szablonów (`astro check`) |
+| `npm run check:links` | Sprawdza wszystkie linki i kotwice na zbudowanych stronach |
+
+Podgląd w sieci lokalnej (np. na telefonie): `HOST=0.0.0.0 PORT=4803 npm run preview`.
 
 ## Konfiguracja
 
@@ -111,34 +133,34 @@ w `src/data/strona.ts`:
 
 | Pole | Opis |
 |---|---|
-| `siteUrl` | Pełny adres strony. Z niego biorą się canonical, Open Graph, `robots.txt` i `sitemap.xml`. |
-| `owner.name`, `owner.email`, `owner.github` | Dane w kontakcie, stopce i dokumentach prawnych |
+| `siteUrl` | Pełny adres strony. Z niego biorą się canonical, `hreflang`, Open Graph, `robots.txt` i `sitemap.xml`. |
+| `owner` | Imię, e-mail, GitHub i LinkedIn w kontakcie, stopce i dokumentach prawnych |
+| `siteCopy.pl`, `siteCopy.en` | Wszystkie teksty interfejsu w obu językach. TypeScript pilnuje, żeby obie wersje miały te same pola. |
 
 ## Wdrożenie
 
 Każdy push na gałąź `main` uruchamia `.github/workflows/deploy.yml`: `npm ci`, `npm run build`
-i publikację katalogu `out/` na GitHub Pages. W ustawieniach repo **Settings → Pages → Source** musi być
+i publikację katalogu `dist/` na GitHub Pages. W ustawieniach repo **Settings → Pages → Source** musi być
 ustawione na **GitHub Actions**.
 
-Własna domena (np. subdomena is-a.dev): rekord CNAME na `szymonkaczmarczyk.github.io`, potem domena
-w **Settings → Pages → Custom domain**, **Enforce HTTPS** i zmiana `siteUrl` w `src/data/strona.ts`.
+Domena `szymonkaczmarczyk.is-a.dev` to rekord CNAME na `szymonkaczmarczyk.github.io`, ustawiony
+w **Settings → Pages → Custom domain** z włączonym **Enforce HTTPS**.
 
 ## Struktura
 
 ```
 src/
-  app/                 strony (główna, polityka prywatności, regulamin, 404), robots.ts, sitemap.ts, style globalne
-  components/          sekcje i elementy strony, każdy z własnym modułem CSS
-  data/                prace.ts (nagrania i strony na żywo), strona.ts (adres i dane właściciela)
-  lib/                 liquidRenderer.ts i liquidScene.ts (shader i fizyka cieczy), media.ts
+  components/          sekcje strony głównej, strona projektu, strona prawna, nagłówek, stopka, wideo
+  data/                projekty.ts, strona.ts, jezyki.ts
+  layouts/             BaseLayout: head, hreflang, Open Graph, pas pod paskiem stanu iPhone'a, powrót do pozycji
+  pages/               strony polskie, en/ z angielskimi, 404, robots.txt, sitemap.xml
+  styles/              tokens.css (kolory, odstępy, typografia), base.css, fonts.css
 public/
-  prace/               nagrania prac: mp4, webm, plakat jpg i webp w dwóch szerokościach
-  showreel/            montaż nagrań do hero
-  live/                zrzuty stron na żywo
-  o-mnie/              zdjęcie
-  fonts/               Baloo 2 i DM Sans (woff2) z licencjami
-scripts/               podgląd builda i sprawdzanie osadzania
-docs/screenshots/      zrzuty używane w tym README
+  video/               nagrania i plakaty
+  o-mnie/              zdjęcie w 720 i 1080 px
+  fonts/               DM Sans, Instrument Serif, Caveat, Ms Madi (woff2) z licencjami
+scripts/               podgląd builda, twarde spacje, sprawdzanie linków
+docs/                  zrzuty do README, opis nagrań
 .github/workflows/     wdrożenie na GitHub Pages
 ```
 
@@ -146,24 +168,26 @@ docs/screenshots/      zrzuty używane w tym README
 
 - Brak backendu, logowania, formularzy i bazy danych, więc nie ma czego przejąć po stronie serwera.
 - Brak cookies, analityki i zewnętrznych zasobów: fonty, nagrania i zdjęcia są hostowane razem ze stroną.
-- Linki zewnętrzne mają `rel="noopener noreferrer"`.
+- Linki zewnętrzne mają `rel="noopener"` (GitHub i LinkedIn także `noreferrer`).
 - GitHub Pages nie pozwala ustawić własnych nagłówków HTTP (CSP, `frame-ancestors`). Przy przeniesieniu
   na hosting z nagłówkami warto je dodać.
 
 ## Wydajność i dostępność
 
-Pomiar Lighthouse na buildzie produkcyjnym: mobile 100/100/100/100, desktop 98/100/100/100, CLS 0.
+Lighthouse na buildzie produkcyjnym: 100 w każdej kategorii na wszystkich 32 stronach (PL i EN), na
+telefonie i na komputerze. CLS poniżej 0,01.
 
-- Fonty lokalnie w woff2 z podziałem na zakresy znaków, oba kroje ładowane z wyprzedzeniem.
-- Plakaty w webp w dwóch szerokościach przez `srcset`, wideo w webm i mp4, wczytywane dopiero w kadrze.
-- Shader cieczy startuje po załadowaniu strony, trzyma 60 klatek na komputerze i pauzuje poza ekranem.
-- `prefers-reduced-motion` wyłącza ciecz, płynne przewijanie i autoodtwarzanie wideo.
-- Obsługa klawiatury z widocznym focusem, link „przejdź do treści”, opisy alternatywne po polsku.
+- CSS wstawiony w HTML, fonty lokalnie w woff2, przycięte do potrzebnych znaków, krój szeryfowy ładowany
+  z wyprzedzeniem tylko na stronie głównej.
+- Wideo dopiero w kadrze, na telefonie lżejsze pliki H.264, które iPhone dekoduje sprzętowo.
+- `prefers-reduced-motion` wyłącza animacje, przejścia między stronami i autoodtwarzanie wideo.
+- Obsługa klawiatury z widocznym focusem, link „przejdź do treści”, `lang` i `hreflang` na każdej stronie,
+  opisy alternatywne w obu językach, test axe bez naruszeń.
 
 ## Licencja
 
 Kod źródłowy jest na licencji MIT, zobacz [`LICENSE`](LICENSE). Copyright (c) 2026 Szymon Kaczmarczyk.
 
 Licencja nie obejmuje treści: nagrań, plakatów, zrzutów, zdjęcia i tekstów. Należą do autora i ich kopiowanie
-poza dozwolony użytek wymaga zgody. Fonty Baloo 2 i DM Sans są na licencji SIL Open Font License 1.1,
-a pliki licencji leżą obok fontów w `public/fonts/`.
+poza dozwolony użytek wymaga zgody. Fonty DM Sans, Instrument Serif, Caveat i Ms Madi są na licencji
+SIL Open Font License 1.1, a pliki licencji leżą obok fontów w `public/fonts/`.

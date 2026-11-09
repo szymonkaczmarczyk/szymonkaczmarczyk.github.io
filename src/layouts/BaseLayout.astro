@@ -4,9 +4,12 @@ import '../styles/tokens.css';
 import '../styles/base.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { siteMeta } from '../data/strona';
+import { siteCopy } from '../data/strona';
+import { localeMeta, locales, sectionIds, type Locale, type LocalizedPath } from '../data/jezyki';
 
 type Props = {
+  locale: Locale;
+  alternates?: LocalizedPath;
   title?: string;
   description?: string;
   ogImage?: string;
@@ -14,13 +17,18 @@ type Props = {
   preloadSerif?: boolean;
 };
 
-const { title = siteMeta.title, description = siteMeta.description, ogImage = '/og.jpg', indexable = true, preloadSerif = false } = Astro.props;
+const { locale, alternates, title = siteCopy[locale].meta.title, description = siteCopy[locale].meta.description, ogImage = '/og.jpg', indexable = true, preloadSerif = false } = Astro.props;
+const copy = siteCopy[locale];
+const ids = sectionIds[locale];
+const alternateLinks = indexable && alternates ? locales.map((alternateLocale) => ({ hreflang: localeMeta[alternateLocale].htmlLang, href: new URL(alternates[alternateLocale], Astro.site) })) : [];
+const defaultAlternate = indexable && alternates ? new URL(alternates.pl, Astro.site) : undefined;
+const otherOgLocales = locales.filter((candidate) => candidate !== locale).map((candidate) => localeMeta[candidate].ogLocale);
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
-<html lang="pl">
+<html lang={localeMeta[locale].htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -29,6 +37,8 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     <title>{title}</title>
     <meta name="description" content={description} />
     {indexable ? <link rel="canonical" href={canonicalUrl} /> : <meta name="robots" content="noindex" />}
+    {alternateLinks.map((link) => <link rel="alternate" hreflang={link.hreflang} href={link.href} />)}
+    {defaultAlternate && <link rel="alternate" hreflang="x-default" href={defaultAlternate} />}
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -37,7 +47,8 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     {preloadSerif && <link rel="preload" href="/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin />}
     {preloadSerif && <link rel="preload" href="/fonts/instrument-serif-latin-ext-400-italic.woff2" as="font" type="font/woff2" crossorigin />}
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:locale" content={localeMeta[locale].ogLocale} />
+    {otherOgLocales.map((ogLocale) => <meta property="og:locale:alternate" content={ogLocale} />)}
     {indexable && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -48,12 +59,12 @@ const ogImageUrl = new URL(ogImage, Astro.site);
   </head>
   <body>
     <div class="safe-top" aria-hidden="true"></div>
-    <a class="skip-link" href="#tresc">Przejdź do treści</a>
-    <SiteHeader />
-    <main id="tresc">
+    <a class="skip-link" href={`#${ids.content}`}>{copy.layout.skipLink}</a>
+    <SiteHeader locale={locale} alternates={alternates} />
+    <main id={ids.content}>
       <slot />
     </main>
-    <SiteFooter />
+    <SiteFooter locale={locale} alternates={alternates} />
     <script>
       const dropHashAfterJump = () => {
         if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);

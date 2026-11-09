@@ -1,41 +1,45 @@
 ---
 import ProjectVideo from './ProjectVideo.astro';
-import { chapterSlugs, homeAnchorFor, moreProjects, projectHref, titleTransitionNameFor, transitionNameFor } from '../data/projekty';
+import { chapterSlugs, homeAnchorFor, localizeProject, moreProjects, projectHref, titleTransitionNameFor, transitionNameFor } from '../data/projekty';
+import { siteCopy } from '../data/strona';
+import { sectionIds, type Locale } from '../data/jezyki';
 
+type Props = {
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+const workCopy = siteCopy[locale].work;
+const ids = sectionIds[locale];
+const titleId = `${ids.more}-title`;
 const lastIndex = moreProjects.length - 1;
 const isWide = (index: number) => index % 3 === 0 || (index === lastIndex && index % 3 === 1);
 const firstNumber = chapterSlugs.length + 1;
-const projectCountLabel = (count: number) => {
-  const lastDigit = count % 10;
-  const lastTwoDigits = count % 100;
-  const isFew = lastDigit >= 2 && lastDigit <= 4 && (lastTwoDigits < 12 || lastTwoDigits > 14);
-  return `${count} ${count === 1 ? 'projekt' : isFew ? 'projekty' : 'projektów'}`;
-};
 
 const works = moreProjects.map((project, index) => ({
-  project,
+  project: localizeProject(project, locale),
   wide: isWide(index),
-  anchor: homeAnchorFor(project.slug),
+  anchor: homeAnchorFor(project.slug, locale),
   number: String(firstNumber + index).padStart(2, '0'),
 }));
 ---
 
-<section id="wiecej" class="shell more" aria-labelledby="wiecej-title">
+<section id={ids.more} class="shell more" aria-labelledby={titleId}>
   <div class="more__head">
-    <h2 id="wiecej-title" class="more__title">Więcej prac</h2>
-    <p class="small more__count">{projectCountLabel(works.length)}</p>
+    <h2 id={titleId} class="more__title">{workCopy.moreHeading}</h2>
+    <p class="small more__count">{workCopy.projectCount(works.length)}</p>
   </div>
   <ul class="more__grid">
     {
       works.map((work) => (
         <li id={work.anchor} class:list={['work', { 'work--wide': work.wide }]}>
           <div class="work__media reveal-frame" style={`view-transition-name: ${transitionNameFor(work.project.slug)}`}>
-            <ProjectVideo class="work__frame" slug={work.project.slug} label={`nagranie projektu ${work.project.name}`} />
+            <ProjectVideo class="work__frame" slug={work.project.slug} label={workCopy.recordingLabel(work.project.name)} />
           </div>
           <div class="work__caption">
             <span class="small work__number" aria-hidden="true">{work.number}</span>
             <h3 class="work__name">
-              <a class="work__link" href={projectHref(work.project.slug)} style={`view-transition-name: ${titleTransitionNameFor(work.project.slug)}`}>
+              <a class="work__link" href={projectHref(work.project.slug, locale)} style={`view-transition-name: ${titleTransitionNameFor(work.project.slug)}`}>
                 {work.project.name}
               </a>
             </h3>

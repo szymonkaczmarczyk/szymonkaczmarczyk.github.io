@@ -1,18 +1,28 @@
 ---
-import { aboutCopy, owner } from '../data/strona';
+import { aboutPhoto, owner, siteCopy } from '../data/strona';
+import { sectionIds, type Locale } from '../data/jezyki';
+
+type Props = {
+  locale: Locale;
+};
+
+const { locale } = Astro.props;
+const aboutCopy = siteCopy[locale].about;
+const ids = sectionIds[locale];
+const titleId = `${ids.about}-title`;
 
 const photoSizes = '(min-width: 768px) 40vw, 100vw';
 ---
 
-<section id="o-mnie" class="shell about" aria-labelledby="o-mnie-title">
+<section id={ids.about} class="shell about" aria-labelledby={titleId}>
   <picture class="about__photo">
-    <source srcset={`${aboutCopy.photo}-720.webp 720w, ${aboutCopy.photo}-1080.webp 1080w`} sizes={photoSizes} type="image/webp" />
-    <img src={`${aboutCopy.photo}-1080.jpg`} alt={aboutCopy.photoAlt} width="1080" height="1440" loading="lazy" decoding="async" />
+    <source srcset={`${aboutPhoto}-720.webp 720w, ${aboutPhoto}-1080.webp 1080w`} sizes={photoSizes} type="image/webp" />
+    <img src={`${aboutPhoto}-1080.jpg`} alt={aboutCopy.photoAlt} width="1080" height="1440" loading="lazy" decoding="async" />
   </picture>
 
   <div class="about__copy">
-    <p class="hand about__note">o mnie</p>
-    <h2 id="o-mnie-title">{aboutCopy.heading}</h2>
+    <p class="hand about__note">{aboutCopy.note}</p>
+    <h2 id={titleId}>{aboutCopy.heading}</h2>
     <p class="about__principle">{aboutCopy.principle}</p>
     <p class="lead about__text">{aboutCopy.text}</p>
     <p class="signature about__signature" aria-hidden="true">{owner.name}</p>
