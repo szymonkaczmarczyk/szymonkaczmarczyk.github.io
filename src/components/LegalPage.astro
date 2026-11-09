@@ -14,12 +14,12 @@ const { heading, description } = Astro.props;
   <article class="shell legal" aria-labelledby="legal-title">
     <a class="legal__back" href="/">
       <span class="legal__back-arrow" aria-hidden="true">←</span>
-      strona główna
+      Strona główna
     </a>
     <p class="hand legal__note">informacje prawne</p>
     <h1 id="legal-title" class="legal__title">{heading}</h1>
     <p class="small legal__updated">
-      ostatnia zmiana: <time datetime={legalPages.updatedOn}>{legalPages.updatedLabel}</time>
+      Ostatnia zmiana: <time datetime={legalPages.updatedOn}>{legalPages.updatedLabel}</time>
     </p>
     <div class="legal__body">
       <slot />
@@ -39,9 +39,9 @@ const { heading, description } = Astro.props;
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
-    min-height: 44px;
+    min-height: var(--touch-target);
     margin-bottom: var(--space-2);
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: none;
   }
 

@@ -8,29 +8,31 @@ const profiles = [
 ---
 
 <section id="kontakt" class="shell contact" aria-labelledby="kontakt-title">
+  <p class="hand contact__note">kontakt</p>
   <h2 id="kontakt-title" class="contact__title">{contactCopy.heading}</h2>
-  <p class="lead">{contactCopy.text}</p>
+  <a class="contact__email" href={`mailto:${owner.email}`}>{owner.email}</a>
 
-  <div class="contact__actions">
-    <a class="button" href={`mailto:${owner.email}`}>
-      {contactCopy.actionLabel}
-      <span class="button__arrow" aria-hidden="true">→</span>
-    </a>
-    <p class="contact__email">{owner.email}</p>
+  <div class="contact__row">
+    <p class="lead contact__text">{contactCopy.text}</p>
+    <ul class="contact__actions">
+      <li>
+        <a class="button" href={`mailto:${owner.email}`}>
+          {contactCopy.actionLabel}
+          <span class="button__arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      {
+        profiles.map((profile) => (
+          <li>
+            <a class="button button--quiet" href={profile.href} rel="noopener noreferrer">
+              {profile.label}
+              <span class="button__arrow button__arrow--external" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </div>
-
-  <ul class="contact__profiles">
-    {
-      profiles.map((profile) => (
-        <li>
-          <a class="button button--quiet" href={profile.href} rel="noopener noreferrer">
-            {profile.label}
-            <span aria-hidden="true">↗</span>
-          </a>
-        </li>
-      ))
-    }
-  </ul>
 
   <p class="small contact__privacy">
     {contactCopy.privacyNote} {contactCopy.privacyLinkLead} <a href={legalPages.privacy.href}>{contactCopy.privacyLinkLabel}</a>.
@@ -46,25 +48,46 @@ const profiles = [
     scroll-margin-top: var(--space-4);
   }
 
-  .contact__title {
-    max-width: 18ch;
+  .contact__note {
+    color: var(--color-accent);
   }
 
-  .contact__actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-2) var(--space-3);
-    margin-top: var(--space-1);
+  .contact__title {
+    max-width: 22ch;
   }
 
   .contact__email {
-    color: var(--color-ink-muted);
-    letter-spacing: var(--tracking-body);
-    user-select: all;
+    margin-top: var(--space-3);
+    font-size: clamp(24px, 5.6vw, 80px);
+    font-weight: var(--weight-heading);
+    line-height: 1.1;
+    letter-spacing: -0.05em;
+    overflow-wrap: anywhere;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.16em;
+    text-decoration-color: var(--color-accent);
+    transition: color var(--duration-short) var(--ease-calm);
   }
 
-  .contact__profiles {
+  .contact__email:hover {
+    color: var(--color-accent);
+  }
+
+  .contact__row {
+    display: grid;
+    gap: var(--space-4);
+    width: 100%;
+    margin-top: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: var(--border-thin) solid var(--color-line);
+  }
+
+  .contact__text {
+    color: var(--color-ink-muted);
+    max-width: 40ch;
+  }
+
+  .contact__actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
@@ -78,5 +101,12 @@ const profiles = [
 
   .contact__privacy a {
     color: var(--color-ink);
+  }
+
+  @media (min-width: 1024px) {
+    .contact__row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
   }
 </style>

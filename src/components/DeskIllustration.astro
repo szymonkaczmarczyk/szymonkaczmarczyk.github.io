@@ -5,33 +5,29 @@ import { deskLaptopProject as laptopProject, deskPhoneProject as phoneProject } 
 
 <div class="desk">
   <svg class="desk__drawing" viewBox="0 0 800 560" aria-hidden="true" focusable="false">
-    <circle class="desk__sun" cx="150" cy="118" r="56" />
-    <g class="desk__cloud">
-      <rect x="160" y="146" width="140" height="32" rx="16" />
-      <circle cx="198" cy="146" r="26" />
-      <circle cx="238" cy="128" r="34" />
-      <circle cx="276" cy="150" r="22" />
+    <g class="desk__sun">
+      <circle pathLength="1" cx="118" cy="92" r="30" />
+      <path pathLength="1" d="M118 44V32M118 152v-12M70 92H58M178 92h-12M84 58l-8-8M160 134l-8-8M84 126l-8 8M160 50l-8 8" />
     </g>
+    <path pathLength="1" class="desk__line desk__line--fine" d="M630 134c-4-26 30-34 42-16 8-20 44-16 44 8 18-2 26 22 8 30h-90c-18 0-20-20-4-22Z" />
 
-    <line class="desk__floor" x1="0" y1="551" x2="800" y2="551" />
-    <rect class="desk__leg" x="84" y="446" width="18" height="104" />
-    <rect class="desk__leg" x="698" y="446" width="18" height="104" />
-    <rect class="desk__apron" x="60" y="420" width="680" height="28" />
-    <rect class="desk__top" x="40" y="400" width="720" height="22" rx="4" />
+    <rect pathLength="1" class="desk__line" x="188" y="136" width="400" height="262" rx="12" />
+    <path pathLength="1" class="desk__line" d="M162 398H614v3q0 5-6 5H168q-6 0-6-5Z" />
+    <path pathLength="1" class="desk__line desk__line--fine" d="M364 399q0 3 5 3h38q5 0 5-3" />
 
-    <path class="desk__steam" d="M114 330c-9-10 9-18 0-30" />
-    <path class="desk__steam" d="M136 330c-9-10 9-18 0-30" />
-    <path class="desk__mug-handle" d="M156 358a15 15 0 0 1 0 30" />
-    <rect class="desk__mug" x="96" y="342" width="60" height="60" rx="10" />
+    <rect pathLength="1" class="desk__line" x="624" y="244" width="80" height="160" rx="18" />
+    <path pathLength="1" class="desk__line desk__line--fine" d="M707 284v24M621 276v12M621 296v18" />
 
-    <rect class="desk__device" x="214" y="160" width="372" height="240" rx="14" />
-    <path class="desk__device" d="M192 398H608L598 410H202Z" />
-    <rect class="desk__device" x="618" y="276" width="68" height="126" rx="12" />
+    <path pathLength="1" class="desk__line" d="M40 330v54q0 22 22 22h28q22 0 22-22v-54Z" />
+    <path pathLength="1" class="desk__line" d="M112 344q26 0 26 18t-26 18" />
+    <path pathLength="1" class="desk__line desk__line--fine" d="M64 314q-8-12 0-24t0-24M88 314q-8-12 0-24t0-24" />
 
-    <path class="desk__leaf--sage" d="M726 354c-32-18-46-52-42-76 24 14 40 42 42 76Z" />
-    <path class="desk__leaf" d="M728 354c-18-52-10-90 4-116 14 26 18 64-4 116Z" />
-    <path class="desk__leaf" d="M730 354c30-16 44-46 42-70-24 12-38 38-42 70Z" />
-    <path class="desk__pot" d="M700 352H756L749 402H707Z" />
+    <path pathLength="1" class="desk__line" d="M714 340 720 406h42l6-66Z" />
+    <path pathLength="1" class="desk__leaf" d="M741 340c-18-40-22-76-8-116 20 40 22 78 8 116ZM743 340c18-30 34-46 48-50-4 28-20 46-48 50ZM739 340c-10-18-18-28-26-32 2 20 12 30 26 32Z" />
+
+    <path pathLength="1" class="desk__line" d="M20 408h760M20 422h760M20 408v14M780 408v14" />
+    <path pathLength="1" class="desk__line" d="M70 422 62 548M730 422l8 126M94 422l-4 90M706 422l4 90" />
+    <path pathLength="1" class="desk__line desk__line--floor" d="M0 550h800" />
   </svg>
 
   <ProjectVideo
@@ -40,32 +36,25 @@ import { deskLaptopProject as laptopProject, deskPhoneProject as phoneProject } 
     label={`nagranie strony ${laptopProject.name} na ekranie laptopa`}
     priority
   />
+  <span class="desk__notch" aria-hidden="true"></span>
 
-  <picture class="desk__phone-screen">
-    <source srcset={`/video/${phoneProject.slug}-pion.webp`} type="image/webp" />
-    <img src={`/video/${phoneProject.slug}-pion.jpg`} alt={`ekran telefonu ze stroną ${phoneProject.name}, ${phoneProject.kind}`} width="720" height="1280" decoding="async" />
-  </picture>
+  <div class="desk__phone-screen">
+    <ProjectVideo
+      class="desk__phone-video"
+      slug={phoneProject.slug}
+      orientation="pion"
+      label={`nagranie mobilnej wersji strony ${phoneProject.name}, ${phoneProject.kind}, na ekranie telefonu`}
+    />
+    <span class="desk__island" aria-hidden="true"></span>
+  </div>
 </div>
 
 <style>
   .desk {
+    --desk-stroke: 2.6;
     position: relative;
     width: 100%;
     aspect-ratio: 800 / 560;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .desk {
-      animation: desk-enter var(--duration-long) var(--ease-calm) 200ms both;
-    }
-  }
-
-  @keyframes desk-enter {
-    from {
-      opacity: 0.4;
-      filter: blur(12px);
-      transform: scale(1.03);
-    }
   }
 
   .desk__drawing {
@@ -73,88 +62,133 @@ import { deskLaptopProject as laptopProject, deskPhoneProject as phoneProject } 
     inset: 0;
     width: 100%;
     height: 100%;
+    overflow: visible;
+  }
+
+  .desk__drawing path,
+  .desk__drawing rect,
+  .desk__drawing circle {
+    fill: none;
+    stroke-width: var(--desk-stroke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+  }
+
+  .desk__line {
+    stroke: var(--color-ink);
+  }
+
+  .desk__line--fine {
+    stroke-width: calc(var(--desk-stroke) * 0.75);
+  }
+
+  .desk__line--floor {
+    stroke: var(--color-line);
   }
 
   .desk__sun {
-    fill: var(--color-sun);
+    stroke: var(--color-sun);
   }
 
-  .desk__cloud {
-    fill: var(--color-cloud);
-  }
-
-  .desk__floor {
-    stroke: var(--color-desk-edge);
-    stroke-width: 3;
-    stroke-linecap: round;
-  }
-
-  .desk__top {
-    fill: var(--color-desk);
-    stroke: var(--color-desk-edge);
-    stroke-width: 3;
-  }
-
-  .desk__apron,
-  .desk__leg {
-    fill: var(--color-desk-edge);
-  }
-
-  .desk__mug {
-    fill: var(--color-sage);
-  }
-
-  .desk__mug-handle {
-    fill: none;
-    stroke: var(--color-sage);
-    stroke-width: 8;
-  }
-
-  .desk__steam {
-    fill: none;
-    stroke: var(--color-ink-muted);
-    stroke-width: 3;
-    stroke-linecap: round;
-  }
-
-  .desk__device {
-    fill: var(--color-ink);
-  }
-
-  .desk__pot {
-    fill: var(--color-pot);
+  .desk__sun circle,
+  .desk__sun path {
+    stroke-width: calc(var(--desk-stroke) * 1.2);
   }
 
   .desk__leaf {
-    fill: var(--color-leaf);
-  }
-
-  .desk__leaf--sage {
-    fill: var(--color-sage);
+    stroke: var(--color-accent);
   }
 
   .desk :global(.desk__laptop-screen) {
     position: absolute;
-    left: 29%;
-    top: 31.4286%;
-    width: 42%;
-    height: 37.5%;
-    border-radius: 4px;
+    left: 24.25%;
+    top: 25.3571%;
+    width: 48.5%;
+    height: 44.6429%;
+    overflow: hidden;
+    border-radius: var(--radius);
+  }
+
+  .desk__notch {
+    position: absolute;
+    left: 48.5%;
+    top: 25.3571%;
+    width: 4.5%;
+    height: 1.6%;
+    border-radius: 0 0 var(--radius) var(--radius);
+    background-color: var(--color-ink);
+    translate: -50% 0;
   }
 
   .desk__phone-screen {
     position: absolute;
-    left: 78%;
-    top: 51.0714%;
-    width: 7%;
-    height: 17.8571%;
+    left: 78.625%;
+    top: 44.4643%;
+    width: 8.75%;
+    height: 26.7857%;
     overflow: hidden;
-    border-radius: 6px;
+    border-radius: 18% / 8.4%;
+    background-color: var(--color-ink);
+    container-type: inline-size;
   }
 
-  .desk__phone-screen img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  .desk__phone-screen :global(.desk__phone-video) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .desk__island {
+    position: absolute;
+    top: 4cqi;
+    left: 50%;
+    width: 34cqi;
+    height: 10cqi;
+    border-radius: var(--radius-pill);
+    background-color: black;
+    translate: -50% 0;
+  }
+
+  @media (min-width: 768px) {
+    .desk {
+      --desk-stroke: 2;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .desk__drawing path,
+    .desk__drawing rect,
+    .desk__drawing circle {
+      animation: desk-draw 1400ms var(--ease-calm) 150ms both;
+    }
+
+    .desk__sun circle,
+    .desk__sun path,
+    .desk__leaf {
+      animation-delay: 650ms;
+    }
+
+    .desk :global(.desk__laptop-screen),
+    .desk__notch,
+    .desk__phone-screen {
+      animation: screen-on var(--duration-medium) var(--ease-calm) 1100ms both;
+    }
+  }
+
+  @keyframes desk-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes screen-on {
+    from {
+      opacity: 0;
+      filter: brightness(1.8);
+    }
   }
 </style>

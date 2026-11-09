@@ -6,7 +6,7 @@ export default defineConfig({
   trailingSlash: 'ignore',
   build: {
     format: 'directory',
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
   },
   devToolbar: {
     enabled: false,

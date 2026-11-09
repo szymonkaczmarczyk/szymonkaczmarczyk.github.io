@@ -3,22 +3,22 @@ import LegalPage from '../components/LegalPage.astro';
 import { legalPages, owner } from '../data/strona';
 ---
 
-<LegalPage heading="regulamin" description="zasady korzystania z portfolio Szymona Kaczmarczyka - charakter strony, prawa autorskie i kontakt">
-  <h2>właściciel strony</h2>
-  <p>stronę prowadzi prywatnie {owner.name}.</p>
+<LegalPage heading="Regulamin" description="Zasady korzystania z portfolio Szymona Kaczmarczyka - charakter strony, prawa autorskie i kontakt">
+  <h2>Właściciel strony</h2>
+  <p>Stronę prowadzi prywatnie {owner.name}.</p>
 
-  <h2>charakter strony</h2>
-  <p>portfolio ma charakter informacyjny i niekomercyjny. nie sprzedaje usług przez internet i nie zawiera umów na odległość.</p>
+  <h2>Charakter strony</h2>
+  <p>Portfolio ma charakter informacyjny i niekomercyjny. Nie sprzedaje usług przez internet i nie zawiera umów na odległość.</p>
 
-  <h2>prawa autorskie</h2>
-  <p>kod źródłowy strony jest dostępny na licencji MIT. nagrania, plakaty, zdjęcia i teksty należą do właściciela strony i nie są objęte tą licencją. kopiowanie ich poza dozwolony użytek wymaga zgody.</p>
+  <h2>Prawa autorskie</h2>
+  <p>Kod źródłowy strony jest dostępny na licencji MIT. Nagrania, plakaty, zdjęcia i teksty należą do właściciela strony i nie są objęte tą licencją. Kopiowanie ich poza dozwolony użytek wymaga zgody.</p>
 
-  <h2>strony zewnętrzne</h2>
-  <p>linki do projektów, GitHuba i LinkedIna prowadzą do serwisów, które mają własne regulaminy i polityki prywatności.</p>
+  <h2>Strony zewnętrzne</h2>
+  <p>Linki do projektów, GitHuba i LinkedIna prowadzą do serwisów, które mają własne regulaminy i polityki prywatności.</p>
 
-  <h2>dane osobowe</h2>
-  <p>zasady przetwarzania danych opisuje <a href={legalPages.privacy.href}>{legalPages.privacy.label}</a>.</p>
+  <h2>Dane osobowe</h2>
+  <p>Zasady przetwarzania danych opisuje <a href={legalPages.privacy.href}>{legalPages.privacy.label}</a>.</p>
 
-  <h2>kontakt</h2>
-  <p>pytania i uwagi: <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>
+  <h2>Kontakt</h2>
+  <p>Pytania i uwagi: <a href={`mailto:${owner.email}`}>{owner.email}</a>.</p>
 </LegalPage>

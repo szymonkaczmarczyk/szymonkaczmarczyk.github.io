@@ -1,11 +1,12 @@
 ---
 import ProjectVideo from './ProjectVideo.astro';
-import ProjectPoster from './ProjectPoster.astro';
-import { chapterProjects, homeAnchorFor, projectHref, transitionNameFor } from '../data/projekty';
+import { chapterProjects, homeAnchorFor, projectHref, titleTransitionNameFor, transitionNameFor } from '../data/projekty';
 
 const chapterTones = ['ink', 'accent'] as const;
 const dividerPath = 'M0 22C140 8 260 34 420 20S700 6 860 22S1160 36 1300 18S1400 14 1440 20';
 const wavePath = 'M0 96V52C120 30 220 70 360 48S600 18 760 44S1040 78 1200 46S1380 30 1440 40V96Z';
+const waveSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 96' preserveAspectRatio='none'><path d='${wavePath}'/></svg>`;
+const waveMaskStyle = `--wave-mask: url("data:image/svg+xml,${encodeURIComponent(waveSvg)}")`;
 
 const chapters = chapterProjects.map((project, index) => ({
   project,
@@ -13,16 +14,13 @@ const chapters = chapterProjects.map((project, index) => ({
   anchor: homeAnchorFor(project.slug),
   tone: chapterTones[index % chapterTones.length],
 }));
-const chapterCount = chapters.length;
 ---
 
 <section id="prace" class="cinema" data-cinema data-tone={chapters[0].tone} aria-labelledby="prace-title">
-  <svg class="cinema__wave" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <path d={wavePath} />
-  </svg>
+  <div class="cinema__wave grain" style={waveMaskStyle} aria-hidden="true"></div>
 
-  <div class="cinema__body">
-    <h2 id="prace-title" class="visually-hidden">prace</h2>
+  <div class="cinema__body grain">
+    <h2 id="prace-title" class="visually-hidden">Prace</h2>
 
     <nav class="cinema__progress" aria-label="rozdziały">
       <ol class="shell cinema__progress-list">
@@ -53,36 +51,30 @@ const chapterCount = chapters.length;
             </svg>
           </div>
         )}
-        <article id={chapter.anchor} class="chapter" data-chapter data-tone={chapter.tone} aria-labelledby={`${chapter.anchor}-nazwa`}>
-          <div class="chapter__media reveal-frame" style={`view-transition-name: ${transitionNameFor(chapter.project.slug)}`}>
-            {chapter.project.media === 'video' ? (
-              <ProjectVideo class="chapter__frame" slug={chapter.project.slug} label={`nagranie projektu ${chapter.project.name}`} />
-            ) : (
-              <ProjectPoster class="chapter__frame" slug={chapter.project.slug} alt={`zrzut ekranu strony ${chapter.project.name}, ${chapter.project.kind}`} />
-            )}
-          </div>
+        <article id={chapter.anchor} class="shell chapter" data-chapter data-tone={chapter.tone} aria-labelledby={`${chapter.anchor}-nazwa`}>
           <div class="chapter__caption">
-            <p class="hand chapter__note">
-              rozdział {chapter.number} z {chapterCount}
-            </p>
-            <h3 id={`${chapter.anchor}-nazwa`} class="chapter__name">
+            <h3 id={`${chapter.anchor}-nazwa`} class="chapter__name" style={`view-transition-name: ${titleTransitionNameFor(chapter.project.slug)}`}>
               {chapter.project.name}
             </h3>
             <p class="chapter__tagline">{chapter.project.tagline}</p>
             <a class="button button--paper" href={projectHref(chapter.project.slug)}>
-              zobacz projekt<span class="visually-hidden"> {chapter.project.name}</span>
+              Zobacz projekt<span class="visually-hidden"> {chapter.project.name}</span>
               <span class="button__arrow" aria-hidden="true">→</span>
             </a>
           </div>
+          <figure class="chapter__figure">
+            <div class="chapter__media reveal-frame" style={`view-transition-name: ${transitionNameFor(chapter.project.slug)}`}>
+              <ProjectVideo class="chapter__frame" slug={chapter.project.slug} label={`nagranie projektu ${chapter.project.name}`} />
+            </div>
+            <figcaption class="small chapter__stack">{chapter.project.stack.join(' · ')}</figcaption>
+          </figure>
         </article>
         </>
       ))
     }
   </div>
 
-  <svg class="cinema__wave cinema__wave--closing" viewBox="0 0 1440 96" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <path d={wavePath} />
-  </svg>
+  <div class="cinema__wave cinema__wave--closing grain" style={waveMaskStyle} aria-hidden="true"></div>
 </section>
 
 <style>
@@ -102,8 +94,11 @@ const chapterCount = chapters.length;
     width: 100%;
     height: clamp(32px, 6vw, 88px);
     margin-bottom: -1px;
-    fill: var(--cinema-tone);
-    transition: fill var(--tone-transition);
+    background-color: var(--cinema-tone);
+    mask-image: var(--wave-mask);
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    transition: background-color var(--tone-transition);
   }
 
   .cinema__wave--closing {
@@ -114,7 +109,7 @@ const chapterCount = chapters.length;
 
   .cinema__body {
     padding-bottom: var(--space-8);
-    background: var(--cinema-tone);
+    background-color: var(--cinema-tone);
     transition: background-color var(--tone-transition);
   }
 
@@ -122,7 +117,8 @@ const chapterCount = chapters.length;
     position: sticky;
     top: 0;
     z-index: 5;
-    background: var(--cinema-tone);
+    background-color: var(--cinema-tone);
+    background-image: var(--grain-texture);
     transition: background-color var(--tone-transition);
   }
 
@@ -137,7 +133,7 @@ const chapterCount = chapters.length;
   .cinema__progress-link {
     display: flex;
     align-items: center;
-    min-height: 44px;
+    min-height: var(--touch-target);
   }
 
   .cinema__progress-track {
@@ -160,7 +156,8 @@ const chapterCount = chapters.length;
   .chapter {
     position: relative;
     display: grid;
-    scroll-margin-top: 44px;
+    gap: var(--space-4);
+    scroll-margin-top: var(--touch-target);
   }
 
   .chapter-divider {
@@ -179,11 +176,21 @@ const chapterCount = chapters.length;
     stroke-dasharray: 1;
   }
 
+  .chapter__figure {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
   .chapter__media {
+    --reveal-radius: var(--radius-media);
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius-media);
     background: var(--color-ink);
+    box-shadow: 0 0 0 var(--border-thin) color-mix(in srgb, var(--color-paper) 14%, transparent);
   }
 
   .chapter__media :global(.chapter__frame) {
@@ -193,16 +200,15 @@ const chapterCount = chapters.length;
     height: 100%;
   }
 
+  .chapter__stack {
+    color: color-mix(in srgb, var(--color-paper) 90%, transparent);
+  }
+
   .chapter__caption {
     display: grid;
     justify-items: start;
     gap: var(--space-2);
-    padding: var(--space-4) var(--gutter) 0;
-  }
-
-  .chapter__note {
-    color: var(--color-sun);
-    font-size: var(--text-hand-large);
+    padding-top: var(--space-4);
   }
 
   .chapter__name {
@@ -210,25 +216,32 @@ const chapterCount = chapters.length;
   }
 
   .chapter__tagline {
+    max-width: 34ch;
     font-size: var(--text-body-large);
     letter-spacing: var(--tracking-body);
+    color: color-mix(in srgb, var(--color-paper) 90%, transparent);
   }
 
   .chapter__caption .button {
-    margin-top: var(--space-1);
+    margin-top: var(--space-2);
   }
 
+  @media (max-width: 1023px) {
+    .chapter__figure {
+      order: -1;
+    }
+
+    .chapter__caption {
+      padding-top: 0;
+    }
+  }
 
   @media (min-width: 1024px) {
-    .chapter__caption {
-      position: absolute;
-      left: var(--gutter);
-      bottom: var(--space-4);
-      max-width: 560px;
-      padding: var(--space-4);
-      border-radius: var(--radius);
-      background: var(--cinema-tone);
-      transition: background-color var(--tone-transition);
+    .chapter {
+      grid-template-columns: 4fr 8fr;
+      align-items: center;
+      gap: var(--space-8);
+      padding-block: var(--space-4);
     }
   }
 </style>

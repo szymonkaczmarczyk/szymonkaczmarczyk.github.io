@@ -3,15 +3,23 @@ type Props = {
   slug: string;
   label: string;
   priority?: boolean;
+  orientation?: 'poziom' | 'pion';
   class?: string;
 };
 
-const { slug, label, priority = false, class: className } = Astro.props;
+const { slug, label, priority = false, orientation = 'poziom', class: className } = Astro.props;
 
 const videoBase = `/video/${slug}`;
+const posterBase = orientation === 'pion' ? `${videoBase}-pion` : videoBase;
+const phoneQuery = '(max-width: 767px)';
+const touchQuery = '(hover: none)';
+const hasPhoneRendition = orientation === 'poziom';
+const desktopMp4 = `${videoBase}-${orientation}.mp4`;
 const sources = [
-  { src: `${videoBase}-poziom.webm`, type: 'video/webm' },
-  { src: `${videoBase}-poziom.mp4`, type: 'video/mp4' },
+  ...(hasPhoneRendition ? [{ src: `${videoBase}-poziom-640.mp4`, type: 'video/mp4', media: phoneQuery }] : []),
+  { src: desktopMp4, type: 'video/mp4', media: touchQuery },
+  { src: `${videoBase}-${orientation}.webm`, type: 'video/webm' },
+  { src: desktopMp4, type: 'video/mp4' },
 ];
 const loading = priority ? 'eager' : 'lazy';
 const fetchpriority = priority ? 'high' : 'auto';
@@ -19,11 +27,12 @@ const fetchpriority = priority ? 'high' : 'auto';
 
 <figure class:list={['project-video', className]} data-project-video aria-label={label}>
   <picture class="project-video__poster">
-    <source srcset={`${videoBase}.webp`} type="image/webp" />
-    <img src={`${videoBase}.jpg`} alt="" loading={loading} fetchpriority={fetchpriority} decoding="async" />
+    {hasPhoneRendition && <source srcset={`${videoBase}-640.webp`} type="image/webp" media={phoneQuery} />}
+    <source srcset={`${posterBase}.webp`} type="image/webp" />
+    <img src={`${posterBase}.jpg`} alt="" loading={loading} fetchpriority={fetchpriority} decoding="async" />
   </picture>
   <video class="project-video__media" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture disableRemotePlayback>
-    {sources.map((source) => <source src={source.src} type={source.type} />)}
+    {sources.map((source) => <source src={source.src} type={source.type} media={source.media} />)}
   </video>
 </figure>
 

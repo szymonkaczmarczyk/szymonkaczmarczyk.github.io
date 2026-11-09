@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --port 4800",
-    "build": "astro build",
+    "build": "astro build && node scripts/sierotki.mjs",
     "preview": "node scripts/podglad.mjs",
-    "check": "astro check"
+    "check": "astro check",
+    "check:links": "node scripts/sprawdz-linki.mjs"
   },
   "dependencies": {
     "astro": "7.4.7"

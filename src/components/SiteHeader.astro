@@ -10,7 +10,7 @@ import { navigation, owner } from '../data/strona';
         {
           navigation.map((item) => (
             <li>
-              <a href={item.href}>{item.label}</a>
+              <a class="link-draw" href={item.href}>{item.label}</a>
             </li>
           ))
         }
@@ -23,6 +23,7 @@ import { navigation, owner } from '../data/strona';
   .site-header {
     position: relative;
     z-index: 10;
+    background-color: var(--color-paper);
   }
 
   .site-header__inner {
@@ -34,7 +35,7 @@ import { navigation, owner } from '../data/strona';
   }
 
   .site-header__name {
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: none;
     white-space: nowrap;
   }
@@ -49,13 +50,9 @@ import { navigation, owner } from '../data/strona';
   .site-header__links a {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: var(--touch-target);
     padding-inline: var(--space-1);
-    text-decoration: none;
-  }
-
-  .site-header__links a:hover {
-    text-decoration: underline;
+    --link-inset: var(--space-1);
   }
 
   @media (max-width: 479px) {
@@ -74,7 +71,8 @@ import { navigation, owner } from '../data/strona';
 
   @media (max-width: 359px) {
     .site-header__links a {
-      padding-inline: 4px;
+      padding-inline: var(--space-half);
+      --link-inset: var(--space-half);
     }
   }
 </style>

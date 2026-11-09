@@ -4,17 +4,12 @@
   --color-ink-muted: #6b604f;
   --color-accent: #2f6b4f;
   --color-sun: #f2b66b;
-  --color-desk: #c99f72;
-  --color-desk-edge: #b88a5c;
-  --color-sage: #8fae9a;
-  --color-pot: #b7835f;
-  --color-leaf: #4f7a5c;
-  --color-cloud: #fbf7ef;
   --color-line: color-mix(in srgb, var(--color-ink) 16%, transparent);
 
-  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-sans: 'DM Sans', 'DM Sans Fallback', system-ui, sans-serif;
   --font-hand: 'Caveat', 'Segoe Print', cursive;
-  --font-signature: 'Mrs Saint Delafield', 'Snell Roundhand', cursive;
+  --font-signature: 'Ms Madi', 'Snell Roundhand', cursive;
+  --font-serif: 'Instrument Serif', 'Instrument Serif Fallback', Georgia, serif;
 
   --text-h1: 44px;
   --text-h2: 32px;
@@ -27,7 +22,8 @@
   --text-hand-large: 28px;
   --text-signature: 56px;
 
-  --leading-heading: 1.1;
+  --leading-heading: 1.08;
+  --weight-heading: 500;
   --leading-body: 1.6;
   --tracking-heading: -0.06em;
   --tracking-body: -0.02em;
@@ -49,7 +45,13 @@
   --section-gap: var(--space-10);
   --shell-max: 1280px;
   --radius: 8px;
+  --radius-media: 16px;
+  --radius-pill: 999px;
+  --pill-icon: 40px;
+  --grain-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0.16 0 0 0 -0.04'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
   --border-thin: 1px;
+  --space-half: 4px;
+  --touch-target: 44px;
   --focus-ring: 3px solid var(--color-accent);
   --header-height: var(--space-8);
 
@@ -69,6 +71,7 @@
     --text-signature: 72px;
     --gutter: var(--space-4);
     --section-gap: var(--space-12);
+    --radius-media: 20px;
   }
 }
 

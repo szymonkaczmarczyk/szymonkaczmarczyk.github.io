@@ -1,40 +1,97 @@
 ---
-import { legalPages, owner } from '../data/strona';
+import { footerCopy, legalPages, navigation, owner } from '../data/strona';
 
 const currentYear = new Date().getFullYear();
+const columns = [
+  { heading: footerCopy.siteHeading, links: navigation },
+  {
+    heading: footerCopy.contactHeading,
+    links: [
+      { href: `mailto:${owner.email}`, label: footerCopy.emailLabel },
+      { href: owner.github, label: 'GitHub', external: true },
+      { href: owner.linkedin, label: 'LinkedIn', external: true },
+    ],
+  },
+  { heading: footerCopy.legalHeading, links: [legalPages.privacy, legalPages.terms] },
+];
 ---
 
-<footer class="site-footer">
+<footer class="site-footer grain">
   <div class="shell site-footer__inner">
-    <p class="small">{owner.name}, {currentYear}</p>
-    <ul class="site-footer__links small">
-      <li><a href={legalPages.privacy.href}>{legalPages.privacy.label}</a></li>
-      <li><a href={legalPages.terms.href}>{legalPages.terms.label}</a></li>
-      <li><a href={owner.github} rel="noopener noreferrer">github</a></li>
-      <li><a href={owner.linkedin} rel="noopener noreferrer">linkedin</a></li>
-    </ul>
+    <div class="site-footer__intro">
+      <p class="site-footer__name">{owner.name}</p>
+      <p class="small site-footer__note">{footerCopy.note}</p>
+    </div>
+    {
+      columns.map((column) => (
+        <nav class="site-footer__column" aria-label={column.heading}>
+          <p class="small site-footer__heading">{column.heading}</p>
+          <ul class="site-footer__links">
+            {column.links.map((link) => (
+              <li>
+                <a class="link-draw" href={link.href} rel={'external' in link && link.external ? 'noopener noreferrer' : undefined}>
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))
+    }
+    <p class="small site-footer__year">© {currentYear}</p>
   </div>
+  <p class="site-footer__signature" aria-hidden="true">{owner.name}</p>
 </footer>
+
+<script>
+  const footer = document.querySelector<HTMLElement>('.site-footer');
+  const revealWholeFooter = () => {
+    const pageEnd = document.documentElement.scrollHeight - window.innerHeight;
+    if (window.scrollY < pageEnd) window.scrollTo({ top: pageEnd, behavior: 'instant' });
+  };
+  footer?.addEventListener('focusin', revealWholeFooter);
+</script>
 
 <style>
   .site-footer {
-    border-top: var(--border-thin) solid var(--color-line);
-    margin-top: var(--section-gap);
+    --focus-ring: 3px solid var(--color-sun);
+    position: relative;
+    overflow: hidden;
+    margin-top: calc(var(--radius-media) * -2);
+    padding-top: calc(var(--radius-media) * 2);
+    background-color: var(--color-ink);
+    color: var(--color-paper);
   }
 
   .site-footer__inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-2);
-    padding-block: var(--space-4);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-5) var(--space-4);
+    padding-block: var(--space-8) var(--space-4);
+  }
+
+  .site-footer__intro {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .site-footer__name {
+    font-weight: 500;
+  }
+
+  .site-footer__note,
+  .site-footer__heading,
+  .site-footer__year {
+    color: color-mix(in srgb, var(--color-paper) 68%, transparent);
+  }
+
+  .site-footer__heading {
+    margin-bottom: var(--space-1);
   }
 
   .site-footer__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-1) var(--space-3);
+    display: grid;
     padding: 0;
     list-style: none;
   }
@@ -42,6 +99,68 @@ const currentYear = new Date().getFullYear();
   .site-footer__links a {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: var(--touch-target);
+  }
+
+  .site-footer__year {
+    grid-column: 1 / -1;
+  }
+
+  .site-footer__signature {
+    max-width: none;
+    margin: 0;
+    padding: 0.4em var(--gutter) 0.28em;
+    text-align: center;
+    font-family: var(--font-signature);
+    font-size: clamp(40px, 10.5vw, 160px);
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--color-sun);
+  }
+
+  @media (min-width: 768px) and (min-height: 640px) {
+    .site-footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .site-footer__signature {
+        animation-name: signature-write;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --page-content;
+        animation-range: exit 0% exit 45%;
+      }
+    }
+  }
+
+  @keyframes signature-write {
+    from {
+      clip-path: inset(-0.5em 100% -0.5em 0);
+    }
+
+    to {
+      clip-path: inset(-0.5em 0 -0.5em 0);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__inner {
+      grid-template-columns: 2fr 1fr 1fr 1fr auto;
+      padding-top: var(--space-10);
+    }
+
+    .site-footer__intro,
+    .site-footer__year {
+      grid-column: auto;
+    }
+
+    .site-footer__intro {
+      align-content: start;
+    }
   }
 </style>

@@ -1,38 +1,46 @@
 ---
 import ProjectVideo from './ProjectVideo.astro';
-import ProjectPoster from './ProjectPoster.astro';
-import { homeAnchorFor, moreProjects, projectHref, transitionNameFor } from '../data/projekty';
+import { chapterSlugs, homeAnchorFor, moreProjects, projectHref, titleTransitionNameFor, transitionNameFor } from '../data/projekty';
 
 const lastIndex = moreProjects.length - 1;
 const isWide = (index: number) => index % 3 === 0 || (index === lastIndex && index % 3 === 1);
+const firstNumber = chapterSlugs.length + 1;
+const projectCountLabel = (count: number) => {
+  const lastDigit = count % 10;
+  const lastTwoDigits = count % 100;
+  const isFew = lastDigit >= 2 && lastDigit <= 4 && (lastTwoDigits < 12 || lastTwoDigits > 14);
+  return `${count} ${count === 1 ? 'projekt' : isFew ? 'projekty' : 'projektów'}`;
+};
 
 const works = moreProjects.map((project, index) => ({
   project,
   wide: isWide(index),
   anchor: homeAnchorFor(project.slug),
+  number: String(firstNumber + index).padStart(2, '0'),
 }));
 ---
 
 <section id="wiecej" class="shell more" aria-labelledby="wiecej-title">
-  <h2 id="wiecej-title" class="more__title">więcej prac</h2>
+  <div class="more__head">
+    <h2 id="wiecej-title" class="more__title">Więcej prac</h2>
+    <p class="small more__count">{projectCountLabel(works.length)}</p>
+  </div>
   <ul class="more__grid">
     {
       works.map((work) => (
         <li id={work.anchor} class:list={['work', { 'work--wide': work.wide }]}>
           <div class="work__media reveal-frame" style={`view-transition-name: ${transitionNameFor(work.project.slug)}`}>
-            {work.project.media === 'video' ? (
-              <ProjectVideo class="work__frame" slug={work.project.slug} label={`nagranie projektu ${work.project.name}`} />
-            ) : (
-              <ProjectPoster class="work__frame" slug={work.project.slug} alt={`zrzut ekranu strony ${work.project.name}, ${work.project.kind}`} />
-            )}
+            <ProjectVideo class="work__frame" slug={work.project.slug} label={`nagranie projektu ${work.project.name}`} />
           </div>
           <div class="work__caption">
+            <span class="small work__number" aria-hidden="true">{work.number}</span>
             <h3 class="work__name">
-              <a class="work__link" href={projectHref(work.project.slug)}>
+              <a class="work__link" href={projectHref(work.project.slug)} style={`view-transition-name: ${titleTransitionNameFor(work.project.slug)}`}>
                 {work.project.name}
               </a>
             </h3>
-            <p class="work__tagline">{work.project.tagline}</p>
+            <p class="hand work__kind">{work.project.kind}</p>
+            {work.wide && <p class="work__tagline">{work.project.tagline}</p>}
           </div>
         </li>
       ))
@@ -45,6 +53,20 @@ const works = moreProjects.map((project, index) => ({
     display: grid;
     gap: var(--space-6);
     padding-block: var(--section-gap) 0;
+  }
+
+  .more__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-bottom: var(--space-3);
+    border-bottom: var(--border-thin) solid var(--color-line);
+  }
+
+  .more__count {
+    color: var(--color-ink-muted);
   }
 
   .more__grid {
@@ -63,11 +85,11 @@ const works = moreProjects.map((project, index) => ({
   }
 
   .work__media {
-    --reveal-radius: var(--radius);
+    --reveal-radius: var(--radius-media);
     position: relative;
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    border-radius: var(--radius);
+    border-radius: var(--radius-media);
     background: var(--color-ink);
   }
 
@@ -80,14 +102,40 @@ const works = moreProjects.map((project, index) => ({
 
   .work__caption {
     display: grid;
-    gap: var(--space-1);
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: var(--space-2);
+    row-gap: var(--space-half);
+  }
+
+  .work__number {
+    grid-column: 2;
+    grid-row: 1;
+    color: var(--color-ink-muted);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: var(--tracking-caps);
   }
 
   .work__name {
+    grid-column: 1;
+    grid-row: 1;
     font-size: var(--text-h3);
   }
 
+  .work__kind {
+    grid-column: 1 / -1;
+    color: var(--color-accent);
+  }
+
+  .work__tagline {
+    grid-column: 1 / -1;
+    margin-top: var(--space-1);
+    color: var(--color-ink-muted);
+    letter-spacing: var(--tracking-body);
+  }
+
   .work__link {
+    display: inline-block;
     text-decoration: none;
   }
 
@@ -105,18 +153,13 @@ const works = moreProjects.map((project, index) => ({
   .work:has(.work__link:focus-visible) {
     outline: var(--focus-ring);
     outline-offset: var(--space-1);
-    border-radius: var(--radius);
-  }
-
-  .work__tagline {
-    color: var(--color-ink-muted);
-    letter-spacing: var(--tracking-body);
+    border-radius: var(--radius-media);
   }
 
   @media (hover: hover) {
     .work:hover .work__link {
       text-decoration: underline;
-      text-decoration-thickness: 2px;
+      text-decoration-thickness: var(--border-thin);
       text-underline-offset: 0.12em;
     }
   }
@@ -128,6 +171,35 @@ const works = moreProjects.map((project, index) => ({
 
     .work--wide {
       grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .work--wide {
+      grid-template-columns: 7fr 5fr;
+      align-items: end;
+      gap: var(--space-8);
+      padding-bottom: var(--space-8);
+      border-bottom: var(--border-thin) solid var(--color-line);
+    }
+
+    .work--wide .work__caption {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .work--wide .work__number {
+      grid-column: 1;
+      grid-row: auto;
+      order: -1;
+    }
+
+    .work--wide .work__name {
+      grid-row: auto;
+      font-size: var(--text-h2);
+    }
+
+    .work--wide .work__tagline {
+      max-width: 40ch;
     }
   }
 </style>

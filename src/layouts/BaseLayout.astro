@@ -10,9 +10,11 @@ type Props = {
   title?: string;
   description?: string;
   ogImage?: string;
+  indexable?: boolean;
+  preloadSerif?: boolean;
 };
 
-const { title = siteMeta.title, description = siteMeta.description, ogImage = '/og.jpg' } = Astro.props;
+const { title = siteMeta.title, description = siteMeta.description, ogImage = '/og.jpg', indexable = true, preloadSerif = false } = Astro.props;
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
 ---
@@ -26,14 +28,17 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     <meta name="color-scheme" content="light" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonicalUrl} />
+    {indexable ? <link rel="canonical" href={canonicalUrl} /> : <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/icon-512.png" type="image/png" sizes="512x512" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="preload" href="/fonts/dm-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/dm-sans-latin-ext-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    {preloadSerif && <link rel="preload" href="/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin />}
+    {preloadSerif && <link rel="preload" href="/fonts/instrument-serif-latin-ext-400-italic.woff2" as="font" type="font/woff2" crossorigin />}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pl_PL" />
-    <meta property="og:url" content={canonicalUrl} />
+    {indexable && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageUrl} />
@@ -42,11 +47,58 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
-    <a class="skip-link" href="#tresc">przejdź do treści</a>
+    <div class="safe-top" aria-hidden="true"></div>
+    <a class="skip-link" href="#tresc">Przejdź do treści</a>
     <SiteHeader />
     <main id="tresc">
       <slot />
     </main>
     <SiteFooter />
+    <script>
+      const dropHashAfterJump = () => {
+        if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+      };
+      window.addEventListener('hashchange', dropHashAfterJump);
+
+      const scrollKey = `pozycja:${location.pathname}`;
+      const readSavedScroll = () => {
+        try {
+          return sessionStorage.getItem(scrollKey);
+        } catch {
+          return null;
+        }
+      };
+      window.addEventListener('pagehide', () => {
+        try {
+          sessionStorage.setItem(scrollKey, String(Math.round(window.scrollY)));
+        } catch {}
+      });
+
+      history.scrollRestoration = 'manual';
+      const [navigation] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+      const returnsToPage = navigation?.type === 'reload' || navigation?.type === 'back_forward';
+      const savedScroll = returnsToPage ? readSavedScroll() : null;
+      const targetScroll = savedScroll === null ? null : Number(savedScroll);
+
+      if (targetScroll !== null) {
+        const userTakesOver = ['wheel', 'touchstart', 'keydown', 'pointerdown'];
+        const restoreScroll = () => window.scrollTo({ top: targetScroll, behavior: 'instant' });
+        const keepRestoring = new ResizeObserver(restoreScroll);
+        const stopRestoring = () => {
+          keepRestoring.disconnect();
+          userTakesOver.forEach((eventName) => window.removeEventListener(eventName, stopRestoring));
+        };
+        userTakesOver.forEach((eventName) => window.addEventListener(eventName, stopRestoring, { passive: true }));
+        keepRestoring.observe(document.documentElement);
+        restoreScroll();
+        window.addEventListener('load', () => {
+          restoreScroll();
+          window.setTimeout(stopRestoring, 1500);
+        }, { once: true });
+      }
+
+      if (document.readyState === 'complete') dropHashAfterJump();
+      else window.addEventListener('load', dropHashAfterJump, { once: true });
+    </script>
   </body>
 </html>
