@@ -55,9 +55,9 @@ const polishCopy = {
   },
   about: {
     note: 'o mnie',
-    heading: 'Uczę się, budując',
-    text: 'Projektuję i programuję strony, a potem sprawdzam, jak radzą sobie w codziennym użyciu. Za każdym projektem stoi ta sama zasada.',
-    principle: 'Mniej rzeczy, ale dopracowanych.',
+    heading: 'Od pomysłu do działającej strony',
+    text: 'Zanim napiszę pierwszą linijkę kodu, wiem już, co ktoś ma zrobić na ekranie i ile kliknięć mu to zajmie. Potem piszę, poprawiam i wyrzucam to, co przeszkadza. Najwięcej uczę się przy tym wyrzucaniu.',
+    principle: 'Każde kliknięcie użytkownika musi być warte jego czasu.',
     photoAlt: 'Szymon Kaczmarczyk w czarnym swetrze, siedzi na drewnianej ławce przed przeszkloną ścianą',
   },
   contact: {
@@ -127,9 +127,9 @@ const englishCopy: SiteCopy = {
   },
   about: {
     note: 'about me',
-    heading: 'Learning by building',
-    text: 'I design and code websites, then check how they hold up in everyday use. The same principle sits behind every project.',
-    principle: 'Fewer things, done properly.',
+    heading: 'From idea to a working website',
+    text: 'Before I write the first line of code, I already know what someone needs to do on the screen and how many clicks it will take. Then I write, refine and throw out whatever gets in the way. Throwing things out is where I learn the most.',
+    principle: 'Every click should be worth the user’s time.',
     photoAlt: 'Szymon Kaczmarczyk in a black sweater, sitting on a wooden bench in front of a glass wall',
   },
   contact: {

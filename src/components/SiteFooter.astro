@@ -10,7 +10,16 @@ type Props = {
 const { locale, alternates = homePaths } = Astro.props;
 const { footer: footerCopy, legal, navigation } = siteCopy[locale];
 const currentYear = new Date().getFullYear();
-const columns = [
+
+type FooterLink = {
+  href: string;
+  label: string;
+  external?: boolean;
+  language?: string;
+  current?: boolean;
+};
+
+const columns: { heading: string; links: FooterLink[] }[] = [
   { heading: footerCopy.siteHeading, links: navigation },
   {
     heading: footerCopy.contactHeading,
@@ -34,37 +43,39 @@ const columns = [
 ---
 
 <footer class="site-footer grain">
-  <div class="shell site-footer__inner">
-    <div class="site-footer__intro">
-      <p class="site-footer__name">{owner.name}</p>
-      <p class="small site-footer__note">{footerCopy.note}</p>
+  <div class="site-footer__content">
+    <div class="shell site-footer__inner">
+      <div class="site-footer__intro">
+        <p class="site-footer__name">{owner.name}</p>
+        <p class="small site-footer__note">{footerCopy.note}</p>
+      </div>
+      {
+        columns.map((column) => (
+          <nav class="site-footer__column" aria-label={column.heading}>
+            <p class="small site-footer__heading">{column.heading}</p>
+            <ul class="site-footer__links">
+              {column.links.map((link) => (
+                <li>
+                  <a
+                    class="link-draw"
+                    href={link.href}
+                    rel={link.external ? 'noopener noreferrer' : undefined}
+                    hreflang={link.language}
+                    lang={link.language}
+                    aria-current={link.current ? 'page' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+      <p class="small site-footer__year">© {currentYear}</p>
     </div>
-    {
-      columns.map((column) => (
-        <nav class="site-footer__column" aria-label={column.heading}>
-          <p class="small site-footer__heading">{column.heading}</p>
-          <ul class="site-footer__links">
-            {column.links.map((link) => (
-              <li>
-                <a
-                  class="link-draw"
-                  href={link.href}
-                  rel={'external' in link && link.external ? 'noopener noreferrer' : undefined}
-                  hreflang={'language' in link ? link.language : undefined}
-                  lang={'language' in link ? link.language : undefined}
-                  aria-current={'current' in link && link.current ? 'page' : undefined}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      ))
-    }
-    <p class="small site-footer__year">© {currentYear}</p>
+    <p class="site-footer__signature" aria-hidden="true">{owner.name}</p>
   </div>
-  <p class="site-footer__signature" aria-hidden="true">{owner.name}</p>
 </footer>
 
 <script>
@@ -163,6 +174,32 @@ const columns = [
         animation-timeline: --page-content;
         animation-range: exit 0% exit 45%;
       }
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (max-width: 767px), (prefers-reduced-motion: no-preference) and (max-height: 639px) {
+    @supports (animation-timeline: view()) {
+      .site-footer {
+        view-timeline: --footer block;
+      }
+
+      .site-footer__content {
+        animation-name: footer-pin;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: --footer;
+        animation-range: entry-crossing 0% entry-crossing 100%;
+      }
+    }
+  }
+
+  @keyframes footer-pin {
+    from {
+      transform: translateY(calc(-100% - var(--radius-media) * 2));
+    }
+
+    to {
+      transform: none;
     }
   }
 

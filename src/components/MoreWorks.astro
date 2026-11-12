@@ -168,6 +168,14 @@ const works = moreProjects.map((project, index) => ({
     }
   }
 
+  @media (hover: none) {
+    .work:active .work__link {
+      text-decoration: underline;
+      text-decoration-thickness: var(--border-thin);
+      text-underline-offset: 0.12em;
+    }
+  }
+
   @media (min-width: 768px) {
     .more__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));

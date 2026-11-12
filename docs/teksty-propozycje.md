@@ -128,6 +128,71 @@ Pod tekstem jest nagranie Cyberstartu. Przycisk „zagraj” pojawi się dopiero
   - tekst: od tego pytania zaczyna się każdy mój projekt. potem rozbieram temat na części i składam z niego coś, z czego da się korzystać. tak powstał Cyberstart - minigry, na których sam uczę się bezpieczeństwa.
   - podpis pod nagraniem: tu uczę się bezpieczeństwa, grając
 
+### Nowe warianty z 2026-11-12
+
+Obecnie na stronie: „Uczę się, budując”, zasada „Mniej rzeczy, ale dopracowanych.” i tekst o sprawdzaniu stron w codziennym użyciu. Każdy wariant ma nagłówek, zasadę w cytacie i tekst. Wersja angielska powstanie po wyborze.
+
+- **D od szkicu do kodu**
+  - nagłówek: Od pomysłu do działającej strony
+  - zasada: Projektuję tylko to, co potrafię zbudować.
+  - tekst: Sam rysuję układ, piszę kod i sprawdzam wynik na telefonie i na komputerze. Dzięki temu wiem, co każdy element ekranu daje użytkownikowi, a co można z niego wyrzucić.
+- **E ciekawość**
+  - nagłówek: Zaczynam od pytania
+  - zasada: Jak zrobić to prościej?
+  - tekst: Mapa tańszego tankowania, minigry o bezpieczeństwie w sieci, konwerter kodu sterowników - każdy z tych projektów wziął się z pytania, które nie dawało mi spokoju. Szukam odpowiedzi tak długo, aż da się z niej po prostu korzystać.
+- **F rzemiosło**
+  - nagłówek: Lubię rzeczy dokończone
+  - zasada: Dopracowane, czyli bez zbędnych kroków.
+  - tekst: Najwięcej czasu spędzam na tym, czego nikt nie zauważa - płynnym przewijaniu, czytelnym tekście na telefonie, szybkim ładowaniu. Wtedy strona przestaje przeszkadzać i zostaje to, co ma do powiedzenia.
+
+Wybór właściciela: nagłówek z D („Od pomysłu do działającej strony”, wstawiony 2026-11-12, po angielsku „From idea to a working website”). Zasady i teksty D, E, F odrzucone - nie pasują do niego.
+
+### Druga runda z 2026-11-12: luźno, jak w rozmowie
+
+Kierunek od właściciela: jak pracuję, dlaczego to robię i czego się teraz uczę, ton luźny. Zasady i teksty można łączyć dowolnie. Fakty o nauce z projektów na stronie (Cyberstart, PanRouter, Race Predictor, Match Predictor).
+
+Zasady:
+- **Z1:** Jeśli robię coś drugi raz, piszę do tego skrypt.
+- **Z2:** Gotowe jest wtedy, gdy działa na najstarszym telefonie w domu.
+- **Z3:** Najpierw ma działać, potem ładnie wyglądać, a potem znowu działać.
+
+Teksty:
+- **T1 kroki:** Zaczynam od kartki i jednego pytania: po co ktoś tu wejdzie? Potem projektuję, piszę kod i klikam we wszystko, aż przestanie się psuć. Robię to, bo lubię moment, w którym pomysł z głowy zaczyna działać na cudzym ekranie. Teraz uczę się sieci i bezpieczeństwa - stąd Cyberstart i PanRouter.
+- **T2 ciekawość:** Większość moich projektów zaczęła się od „ciekawe, czy dam radę”. Projektuję, koduję i testuję sam, więc wiem, gdzie co leży i dlaczego. W wolnych chwilach uczę modele przewidywać wyniki wyścigów i meczów, z różnym skutkiem.
+- **T3 od początku do końca:** Lubię, gdy coś po prostu działa, a najbardziej lubię dojść do tego sam. Dlatego robię wszystko po kolei: szkic, projekt, kod, poprawki i publikację. Każdy projekt uczy mnie czegoś nowego, ostatnio najwięcej o sieciach, bezpieczeństwie i uczeniu maszynowym.
+
+Druga runda odrzucona w całości.
+
+### Trzecia runda z 2026-11-12: po 10 nowych
+
+Ton dalej luźny. Zasady i teksty można łączyć dowolnie.
+
+Zasady:
+1. Prościej się nie da? To jeszcze spróbuję.
+2. Pomysł jest tani, działająca wersja już nie.
+3. Lepiej skończyć mniejszą rzecz, niż zacząć wielką.
+4. Każde kliknięcie użytkownika musi być warte jego czasu.
+5. Najpierw telefon, potem cała reszta.
+6. Nie lubię, kiedy strona każe mi czekać.
+7. Kod czytam częściej, niż piszę, więc piszę go czytelnie.
+8. Dobra strona nie potrzebuje instrukcji obsługi.
+9. Najszybciej uczę się wtedy, kiedy coś mi się psuje.
+10. Zrobione dziś jest lepsze niż idealne kiedyś.
+
+Teksty:
+1. Mam w głowie więcej pomysłów niż wolnych wieczorów, więc wybieram te, które dam radę skończyć. Najpierw szkicuję, potem buduję najprostszą wersję i sprawdzam, czy sam chciałbym z niej korzystać. Resztę dokładam po kawałku.
+2. Najbardziej lubię moment, w którym coś, co było tylko notatką w telefonie, nagle działa w przeglądarce. Dla tego momentu siedzę nad kodem dłużej, niż planowałem. Ostatnio najczęściej przy sieciach i bezpieczeństwie.
+3. Przy swoich projektach jestem po trochu projektantem, programistą i testerem. Dzięki temu nic nie ginie po drodze między pomysłem a gotową stroną. A jak coś się zepsuje, przynajmniej wiem, kogo zapytać.
+4. Każdy projekt zaczynam od listy rzeczy, których ma nie robić. Zostaje to, co naprawdę potrzebne, i na tym skupiam cały czas. Potem testuję na telefonie, bo tam większość ludzi i tak to zobaczy.
+5. Często buduję rzeczy, z których sam chcę korzystać. Tak powstała mapa tańszego tankowania i wyszukiwarka tanich lotów. Teraz biorę się za tematy, których jeszcze nie rozumiem - sieci, bezpieczeństwo i modele, które przewidują wyniki.
+6. Lubię rozbierać rzeczy na części, żeby zobaczyć, jak działają. Ze stronami jest tak samo, tylko łatwiej potem złożyć je z powrotem. Każdy nowy projekt jest dla mnie pretekstem, żeby nauczyć się czegoś, czego jeszcze nie umiem.
+7. Zanim napiszę pierwszą linijkę kodu, wiem już, co ktoś ma zrobić na ekranie i ile kliknięć mu to zajmie. Potem piszę, poprawiam i wyrzucam to, co przeszkadza. Najwięcej uczę się przy tym wyrzucaniu.
+8. Dobra strona jest jak dobra rozmowa - konkretna, bez lania wody i bez czekania. Tak staram się projektować i tak piszę kod. Po drodze uczę się wszystkiego, czego wymaga temat, od animacji po uczenie maszynowe.
+9. Pracuję małymi krokami: działająca wersja, poprawki, kolejna działająca wersja. Dzięki temu w każdej chwili mam coś do pokazania. Ostatnio tymi krokami idę przez sieci, bezpieczeństwo i analizę danych.
+10. Najczęściej zaczynam od pytania „a gdyby tak…”. Czasem kończy się na szkicu, czasem na stronie, z której korzystają inni. W obu przypadkach uczę się czegoś nowego i właśnie dlatego to robię.
+
+Wybór właściciela 2026-11-12 (tymczasowy, do zmiany później): zasada 4 i tekst 7, wstawione razem z wersją angielską.
+
 ## 6. Sekcja kontakt
 
 - **A spokojny**

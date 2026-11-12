@@ -385,6 +385,17 @@ main {
   .button:active {
     transform: scale(0.96);
   }
+
+  .link-draw:active::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .button:active .button__arrow {
+    animation: arrow-pass var(--duration-medium) var(--ease-calm);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -449,7 +460,23 @@ main {
       animation-timeline: view(), view();
       animation-range: entry 0% cover 40%, exit 20% exit 100%;
     }
+  }
+}
 
+@media (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+  @supports (animation-timeline: view()) {
+    .reveal-frame {
+      animation-name: frame-grow, frame-shrink;
+      animation-timing-function: linear;
+      animation-fill-mode: both, forwards;
+      animation-timeline: view(), view();
+      animation-range: entry 0% cover 45%, exit 25% exit 100%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
     .reveal-line {
       animation-name: line-draw;
       animation-timing-function: linear;
@@ -477,6 +504,26 @@ main {
 
   to {
     clip-path: inset(4% 3% round var(--space-2));
+  }
+}
+
+@keyframes frame-grow {
+  from {
+    transform: translateY(var(--space-3)) scale(0.88);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
+@keyframes frame-shrink {
+  from {
+    transform: none;
+  }
+
+  to {
+    transform: scale(0.94);
   }
 }
 
